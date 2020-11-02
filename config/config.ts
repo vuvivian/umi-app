@@ -1,3 +1,11 @@
+/*
+ * @Author: vuvivian
+ * @Date: 2020-11-02 00:14:49
+ * @LastEditors: vuvivian
+ * @LastEditTime: 2020-11-02 22:27:43
+ * @Descripttion: 
+ * @FilePath: /umi-app/config/config.ts
+ */
 // https://umijs.org/config/
 import { defineConfig } from 'umi';
 import defaultSettings from './defaultSettings';
@@ -68,6 +76,12 @@ export default defineConfig({
       icon: 'table',
       path: '/list',
       component: './ListTableList',
+    },
+    {
+      name: 'list.workflow',
+      icon: 'table',
+      path: '/workflow',
+      component: './workflow',
     },
     {
       path: '/',

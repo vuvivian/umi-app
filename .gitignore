@@ -1,2 +1,3 @@
 node_modules
 src/.umi/.cache/*
+src/.umi/*
