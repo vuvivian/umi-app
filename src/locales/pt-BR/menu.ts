@@ -1,3 +1,11 @@
+/*
+ * @Author: vuvivian
+ * @Date: 2020-11-02 00:14:49
+ * @LastEditors: vuvivian
+ * @LastEditTime: 2020-11-03 00:05:43
+ * @Descripttion: 
+ * @FilePath: /umi-app/src/locales/pt-BR/menu.ts
+ */
 export default {
   'menu.welcome': 'Welcome',
   'menu.more-blocks': 'More Blocks',
@@ -23,6 +31,7 @@ export default {
   'menu.form.advanced-form': 'Formulário Avançado',
   'menu.list': 'Lista',
   'menu.list.table-list': 'Tabela de Busca',
+  'menu.list.workflow': 'workflow',
   'menu.list.basic-list': 'Lista Básica',
   'menu.list.card-list': 'Lista de Card',
   'menu.list.search-list': 'Lista de Busca',

@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-02 21:49:39
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-02 23:57:10
+ * @LastEditTime: 2020-11-03 00:03:08
  * @Descripttion: 流程设计器
  * @FilePath: /umi-app/src/components/ProcessDesigner/index.jsx
  */
@@ -16,10 +16,12 @@ import lintModule from 'bpmn-js-bpmnlint';
 import getDefaultXml from './process-editor/extend/defaultxml';
 // 样式文件
 import 'bpmn-js/dist/assets/diagram-js.css';
+import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css'
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 import 'bpmn-js-bpmnlint/dist/assets/css/bpmn-js-bpmnlint.css';
 import styles from './index.less'
 
+import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/camunda'
 // 引入flowable的节点文件
 import flowableModdle from './floeModel/flowable.json';
 
@@ -28,6 +30,7 @@ const ProcessDesigner = () => {
   useEffect(() => {
     let modeler = new BpmnModeler({
       container: '#canvas',
+      //添加控制板
       propertiesPanel: {
         parent: '#properties-panel',
       },
@@ -35,6 +38,8 @@ const ProcessDesigner = () => {
         flowable: flowableModdle,
       },
       additionalModules: [
+        // 左边工具栏以及节点
+        propertiesProviderModule,
         lintModule
       ],
       height: '100%',
