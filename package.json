@@ -55,6 +55,7 @@
     "bpmn-js-bpmnlint": "^0.15.0",
     "bpmn-js-properties-panel": "^0.37.4",
     "bpmnlint": "^6.4.0",
+    "camunda-bpmn-moddle": "^4.4.1",
     "classnames": "^2.2.6",
     "lodash": "^4.17.11",
     "moment": "^2.25.3",

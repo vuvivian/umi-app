@@ -1,3 +1,11 @@
+/*
+ * @Author: vuvivian
+ * @Date: 2020-11-01 20:54:41
+ * @LastEditors: vuvivian
+ * @LastEditTime: 2020-11-05 00:05:49
+ * @Descripttion: 
+ * @FilePath: /umi-app/config/defaultSettings.ts
+ */
 import { Settings as LayoutSettings } from '@ant-design/pro-layout';
 
 export default {
@@ -10,7 +18,7 @@ export default {
   fixSiderbar: true,
   colorWeak: false,
   menu: {
-    locale: true,
+    locale: false,
   },
   title: 'Ant Design Pro',
   pwa: false,

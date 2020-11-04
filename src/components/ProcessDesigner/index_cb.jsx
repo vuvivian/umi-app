@@ -2,11 +2,11 @@
  * @Author: vuvivian
  * @Date: 2020-11-02 21:49:39
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-05 00:25:01
+ * @LastEditTime: 2020-11-04 23:56:08
  * @Descripttion: 流程设计器
- * @FilePath: /umi-app/src/components/ProcessDesigner/index.jsx
+ * @FilePath: /umi-app/src/components/ProcessDesigner/index_cb.jsx
  */
-import React, { Component } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { notification } from 'antd';
 // 引入bpmn依赖
 import BpmnModeler from 'bpmn-js/lib/Modeler';
@@ -28,21 +28,10 @@ import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/camu
 // 引入flowable的节点文件
 import flowableModdle from './floeModel/flowable.json';
 
-class ProcessDesigner extends Component{
-  constructor() {
-    super()
-  };
-  
-  state = {
-    scale: 1, // 流程图比例
-    svgVisible: false, // 预览图片
-    svgSrc: '', // 图片地址
-    bpmnModeler: null
-  };
-
-  componentDidMount() {
-    const that = this;
-    this.bpmnModeler = new BpmnModeler({
+const ProcessDesigner = () => {
+  const [bpmnModeler, useBpmnModeler] = useState(null);
+  useEffect(() => {
+    let modeler = new BpmnModeler({
       container: '#canvas',
       //添加控制板
       propertiesPanel: {
@@ -60,38 +49,30 @@ class ProcessDesigner extends Component{
       },
       height: '100%',
       width: '100%'
-    });
+    })
+    useBpmnModeler(modeler)
     const diagramXML = getDefaultXml();
-    this.renderDiagram(diagramXML);
-  }
+    renderDiagram(diagramXML, modeler);
+  }, []);
 
   // 渲染 xml 格式
-  renderDiagram = xml => {
-    this.bpmnModeler.importXML(xml, err => {
-      if (err) {
-        console.log(err);
-        console.log(xml);
-        notification.error({
-          message: '提示',
-          description: '导入失败',
-        });
-      }
-    });
+  const renderDiagram = (xml, modeler) => {
+    console.log(bpmnModeler, modeler)
+    modeler.importXML(xml)
   };
 
-  render() {
-    return (
-      <div className={styles.designerContainer}>
-        {/* 流程图 */}
-        <div className={styles.leftContainer}>
-          <div className={styles.canvas} id="canvas" />
-        </div>
-        {/* 属性栏 */}
-        <div className={styles.rightContainer}>
-          <div id="properties-panel"></div>
-        </div>
+  return (
+    <div className={styles.designerContainer}>
+      {/* 流程图 */}
+      <div className={styles.leftContainer}>
+        <div className={styles.canvas} id="canvas" />
       </div>
-    )
-  }
+      {/* 属性栏 */}
+      <div className={styles.rightContainer}>
+        <div id="properties-panel"></div>
+      </div>
+    </div>
+  )
 }
+
 export default ProcessDesigner
