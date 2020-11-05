@@ -2,23 +2,26 @@
  * @Author: vuvivian
  * @Date: 2020-11-02 21:49:39
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-05 00:25:01
+ * @LastEditTime: 2020-11-05 21:54:53
  * @Descripttion: 流程设计器
  * @FilePath: /umi-app/src/components/ProcessDesigner/index.jsx
  */
 import React, { Component } from 'react';
 import { notification } from 'antd';
-// 引入bpmn依赖
-import BpmnModeler from 'bpmn-js/lib/Modeler';
+// 引入bpmn依赖 src/components/ProcessDesigner/process-editor/modeler/index.js
+// import BpmnModeler from 'bpmn-js/lib/Modeler';
+import BpmnModeler from './process-editor/modeler';
 // 引入校验插件
 import lintModule from 'bpmn-js-bpmnlint';
 // 默认 xml
 import getDefaultXml from './process-editor/extend/defaultxml';
 // 样式文件
 import 'bpmn-js/dist/assets/diagram-js.css';
+import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css'
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css'
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 import 'bpmn-js-bpmnlint/dist/assets/css/bpmn-js-bpmnlint.css';
+import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css' // 右边工具栏样式
 import styles from './index.less'
 
 // 属性面板
