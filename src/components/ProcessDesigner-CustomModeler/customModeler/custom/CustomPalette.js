@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-07 22:26:10
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-07 23:32:31
+ * @LastEditTime: 2020-11-08 01:40:56
  * @Descripttion: 
  * @FilePath: /umi-app/src/components/ProcessDesigner-CustomModeler/customModeler/custom/CustomPalette.js
  */
@@ -69,15 +69,102 @@ PaletteProvider.prototype.getPaletteEntries = function(element) {
       }
   }
 
+  function createAction(type, group, className, title, options) {
+
+    function createListener(event) {
+      var shape = elementFactory.createShape(assign({ type: type }, options));
+
+      if (options) {
+        shape.businessObject.di.isExpanded = options.isExpanded;
+      }
+
+      create.start(event, shape);
+    }
+
+    var shortType = type.replace(/^bpmn:/, '');
+
+    return {
+      group: group,
+      className: className,
+    //   title: title || translate('Create {type}', { type: shortType }),
+     title: title,
+      action: {
+        dragstart: createListener,
+        click: createListener
+      }
+    };
+  }
+
   return {
-      'create.start-event': {
-          group: 'event',
-          className: 'icon-custom icon-custom-start',
-          title: '创建开始节点',
-          action: {
-              dragstart: createStratEvent(),
-              click: createStratEvent()
+    'hand-tool': {
+        group: 'tools',
+        className: 'bpmn-icon-hand-tool',
+        title: '激活抓手工具',
+        action: {
+          click: function(event) {
+            handTool.activateHand(event);
           }
+        }
+      },
+    'lasso-tool': {
+        group: 'tools',
+        className: 'bpmn-icon-lasso-tool',
+        title: '激活套索工具',
+        action: {
+          click: function(event) {
+            lassoTool.activateSelection(event);
+          }
+        }
+      },
+    'create.start-event': {
+        group: 'event',
+        className: 'icon-custom icon-custom-start',
+        title: '创建开始节点',
+        action: {
+            dragstart: createStratEvent(),
+            click: createStratEvent()
+        }
+    },
+    'create.end-event': {
+        group: 'event',
+        className: 'icon-custom bpmn-icon-end-event-none',
+        title: '创建结束节点',
+        action: {
+            dragstart: createStratEvent(),
+            click: createStratEvent()
+        }
+     },
+     // 并行网关
+    'create.paralleles-gateway': createAction(
+      'bpmn:ParallelesGateway', 'gateway', 'bpmn-icon-gateway-none',
+      'Create Gateway'
+    ),
+     // 排他分支
+     'create.exclusive-gateway': createAction(
+        'bpmn:ExclusiveGateway', 'gateway', 'bpmn-icon-gateway-none',
+        'Create Gateway'
+      ),
+      // 审核人
+      'assignee': {
+        group: 'tools',
+        className: 'bpmn-icon-connection-multi',
+        title: 'Assignees',
+        action: {
+          click: function(event) {
+            globalConnect.toggle(event);
+          }
+        }
+      },
+      // 联结
+      'global-connect-tool': {
+        group: 'tools',
+        className: 'bpmn-icon-connection-multi',
+        title: 'Activate the global connect tool',
+        action: {
+          click: function(event) {
+            globalConnect.toggle(event);
+          }
+        }
       },
       'create.lindaidai-task': {
           group: 'model',
@@ -88,14 +175,6 @@ PaletteProvider.prototype.getPaletteEntries = function(element) {
               click: createTask()
           }
       },
-      'create.exclusive-gateway': {
-          group: 'gateway',
-          className: 'bpmn-icon-gateway-none',
-          title: '创建一个网关',
-          action: {
-              dragstart: createGateway(),
-              click: createGateway()
-          }
-      }
+     
   }
 }

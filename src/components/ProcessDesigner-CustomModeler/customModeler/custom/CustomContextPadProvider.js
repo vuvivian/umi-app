@@ -2,11 +2,10 @@
  * @Author: vuvivian
  * @Date: 2020-11-07 22:26:48
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-07 22:50:49
+ * @LastEditTime: 2020-11-07 23:40:36
  * @Descripttion: 
  * @FilePath: /umi-app/src/components/ProcessDesigner-CustomModeler/customModeler/custom/CustomContextPadProvider.js
  */
-// import store from '../../../store'
 export default function ContextPadProvider(contextPad, config, injector, translate, bpmnFactory, elementFactory, create, modeling, connect) {
     this.create = create
     this.elementFactory = elementFactory

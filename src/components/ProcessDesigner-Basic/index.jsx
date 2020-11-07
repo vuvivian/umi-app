@@ -2,12 +2,12 @@
  * @Author: vuvivian
  * @Date: 2020-11-02 21:49:39
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-07 23:37:09
+ * @LastEditTime: 2020-11-07 23:51:38
  * @Descripttion: 流程设计器
  * @FilePath: /umi-app/src/components/ProcessDesigner-Basic/index.jsx
  */
 import React, { Component } from 'react';
-import { notification } from 'antd';
+import { notification , Button} from 'antd';
 // 引入bpmn依赖 src/components/ProcessDesigner/process-editor/modeler/index.js
 import BpmnModeler from 'bpmn-js/lib/Modeler';
 // 引入校验插件
@@ -139,11 +139,11 @@ class ProcessDesigner extends Component{
     return (
       <div>
         <div className="">
-          <Button type="primary" onClick={getXml}>获取</Button>
-          <Button type="primary" onClick={saveXml}>保存</Button>
-          <Button type="primary" onClick={changeXml}>change</Button>
-          <Button type="primary" onClick={saveDiagram}>下载为bpmn</Button>
-          <Button type="primary" onClick={downloadSvg}>下载为svg</Button>
+          <Button type="primary" onClick={this.getXml}>获取</Button>
+          <Button type="primary" onClick={this.saveXml}>保存</Button>
+          <Button type="primary" onClick={this.changeXml}>change</Button>
+          <Button type="primary" onClick={this.saveDiagram}>下载为bpmn</Button>
+          <Button type="primary" onClick={this.downloadSvg}>下载为svg</Button>
         </div>
         <div className={styles.designerContainer}>
           {/* 流程图 */}
