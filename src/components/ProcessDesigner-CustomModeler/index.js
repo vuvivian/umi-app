@@ -1,20 +1,16 @@
 /*
  * @Author: vuvivian
- * @Date: 2020-11-02 21:49:39
+ * @Date: 2020-11-07 22:52:00
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-05 21:54:53
- * @Descripttion: 流程设计器
- * @FilePath: /umi-app/src/components/ProcessDesigner/index.jsx
+ * @LastEditTime: 2020-11-07 23:05:04
+ * @Descripttion: 
+ * @FilePath: /umi-app/src/components/ProcessDesigner-CustomModeler/index.js
  */
 import React, { Component } from 'react';
 import { notification } from 'antd';
-// 引入bpmn依赖 src/components/ProcessDesigner/process-editor/modeler/index.js
-// import BpmnModeler from 'bpmn-js/lib/Modeler';
-import BpmnModeler from './process-editor/modeler';
-// 引入校验插件
-import lintModule from 'bpmn-js-bpmnlint';
+import CustomModeler from './customModeler'
 // 默认 xml
-import getDefaultXml from './process-editor/extend/defaultxml';
+import getDefaultXml from './utils/defaultxml';
 // 样式文件
 import 'bpmn-js/dist/assets/diagram-js.css';
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css'
@@ -23,13 +19,6 @@ import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 import 'bpmn-js-bpmnlint/dist/assets/css/bpmn-js-bpmnlint.css';
 import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css' // 右边工具栏样式
 import styles from './index.less'
-
-// 属性面板
-import propertiesPanelModule from 'bpmn-js-properties-panel'
-import camundaModdleDescriptor from 'camunda-bpmn-moddle/resources/camunda'
-import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/camunda'
-// 引入flowable的节点文件
-import flowableModdle from './floeModel/flowable.json';
 
 class ProcessDesigner extends Component{
   constructor() {
@@ -45,7 +34,7 @@ class ProcessDesigner extends Component{
 
   componentDidMount() {
     const that = this;
-    this.bpmnModeler = new BpmnModeler({
+    this.bpmnModeler = new CustomModeler({
       container: '#canvas',
       //添加控制板
       propertiesPanel: {
@@ -53,12 +42,14 @@ class ProcessDesigner extends Component{
       },
       additionalModules: [
         // 左边工具栏以及节点
-        propertiesProviderModule,
-        propertiesPanelModule,
-        lintModule
+        // propertiesProviderModule,
+        // 右边的工具栏
+        // propertiesPanelModule,
+        // lintModule,
+        // CustomPalette
       ],
       moddleExtensions: {
-        flowable: flowableModdle,
+        // flowable: flowableModdle,
         // camunda: camundaModdleDescriptor 用了报错
       },
       height: '100%',
@@ -84,16 +75,18 @@ class ProcessDesigner extends Component{
 
   render() {
     return (
-      <div className={styles.designerContainer}>
-        {/* 流程图 */}
-        <div className={styles.leftContainer}>
-          <div className={styles.canvas} id="canvas" />
+      // <div>
+        <div className={styles.designerContainer}>
+          {/* 流程图 */}
+          <div className={styles.leftContainer}>
+            <div className={styles.canvas} id="canvas" />
+          </div>
+          {/* 属性栏 */}
+          <div className={styles.rightContainer}>
+            <div id="properties-panel"></div>
+          </div>
         </div>
-        {/* 属性栏 */}
-        <div className={styles.rightContainer}>
-          <div id="properties-panel"></div>
-        </div>
-      </div>
+      // </div>
     )
   }
 }
