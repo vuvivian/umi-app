@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-11 11:05:39
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-11 22:48:14
+ * @LastEditTime: 2020-11-12 01:31:19
  * @Descripttion: 
  * @FilePath: /umi-app/src/pages/Flow/index.tsx
  */
@@ -10,14 +10,15 @@
 import React, { useState, useRef } from 'react';
 import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table';
-import { Button, Divider, message, Input, Drawer } from 'antd';
+import { Button, Modal,  Divider, message, Input, Drawer } from 'antd';
 import { TableListItem } from './data.d';
-
+import ProcessDesigner from '../../components/ProcessDesigner/index'
 import { queryFlow } from './service';
 
 const Flow: React.FC<{}> = () => {
   const actionRef = useRef<ActionType>();
-  
+  const [visible, setVisble] = useState(false);
+
   const columns: ProColumns<TableListItem>[] = [
     {
       title: '模版名称',
@@ -92,18 +93,27 @@ const Flow: React.FC<{}> = () => {
           labelWidth: 120,
         }}
         toolBarRender={() => [
-          <Button type="primary" >新建</Button>,
+          <Button type="primary" onClick={() => {setVisble(true)}} >新建</Button>,
           <Button type="primary" >编辑</Button>,
           <Button type="primary" >发布</Button>,
           <Button type="primary" >失效</Button>,
         ]}
         columns={columns}
-        // GET /flwTemplate/getVersionList
-        request={(params, sorter, filter) => queryFlow({ ...params, sorter, filter })}
+        // request={(params, sorter, filter) => queryFlow({ ...params, sorter, filter })}
         // rowSelection={{
         //   onChange: (_, selectedRows) => setSelectedRows(selectedRows),
         // }}
       />
+      <Drawer
+        title="绘制流程"
+        width={1000}
+        visible={visible}
+        closable={false}
+        bodyStyle={{padding: '0px', background: 'red'}}
+
+      >
+        <ProcessDesigner />
+      </Drawer>
     </PageContainer>
   )
 }

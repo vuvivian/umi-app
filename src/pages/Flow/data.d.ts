@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-11 15:49:44
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-11 22:46:39
+ * @LastEditTime: 2020-11-11 23:20:29
  * @Descripttion: 
  * @FilePath: /umi-app/src/pages/Flow/data.d.ts
  */
@@ -18,7 +18,7 @@ export interface TableListItem {
 }
 
 export interface TableListParams {
-  processName?: string; // 流程名称
+  processName?: string; // 流程名称 
   modelName?: string; // 模型名称
   status?: string;
   name?: string;

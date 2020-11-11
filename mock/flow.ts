@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-11 22:15:49
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-11 22:52:55
+ * @LastEditTime: 2020-11-12 00:14:29
  * @Descripttion: 
  * @FilePath: /umi-app/mock/flow.ts
  */
@@ -11,15 +11,6 @@ import { parse } from 'url';
 import { TableListItem, TableListParams } from '@/pages/Flow/data';
 
 const tableListDataSource = [{
-  key: 2,
-  process_name: `备案申请流程`,
-  type: '备案申请',
-  code: 'BJDT-D-1',
-  version: 'V1',
-  status: 0,
-  updator: 'wang',
-  updated: new Date(),
-},{
   key: 1,
   process_name: `任务填报流程`,
   type: '任务填报',
@@ -30,7 +21,6 @@ const tableListDataSource = [{
   updated: new Date(),
 }]
 const getFlow = (req: Request, res: Response, u: string) => {
-  console.log('getFlow')
   let realUrl = u;
   if (!realUrl || Object.prototype.toString.call(realUrl) !== '[object String]') {
     realUrl = req.url;
