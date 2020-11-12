@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-02 21:49:39
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-07 23:51:38
+ * @LastEditTime: 2020-11-12 22:32:09
  * @Descripttion: 流程设计器
  * @FilePath: /umi-app/src/components/ProcessDesigner-Basic/index.jsx
  */
@@ -31,7 +31,7 @@ import propertiesProviderModule from 'bpmn-js-properties-panel/lib/provider/camu
 // 引入flowable的节点文件
 import flowableModdle from './floeModel/flowable.json';
 
-class ProcessDesigner extends Component{
+class ProcessDesignerBasic extends Component{
   constructor() {
     super()
   };
@@ -159,4 +159,4 @@ class ProcessDesigner extends Component{
     )
   }
 }
-export default ProcessDesigner
+export default ProcessDesignerBasic

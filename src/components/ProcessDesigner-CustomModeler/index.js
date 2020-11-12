@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-07 22:52:00
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-07 23:05:04
+ * @LastEditTime: 2020-11-12 22:32:28
  * @Descripttion: 
  * @FilePath: /umi-app/src/components/ProcessDesigner-CustomModeler/index.js
  */
@@ -20,7 +20,7 @@ import 'bpmn-js-bpmnlint/dist/assets/css/bpmn-js-bpmnlint.css';
 import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css' // 右边工具栏样式
 import styles from './index.less'
 
-class ProcessDesigner extends Component{
+class ProcessDesignerCustom extends Component{
   constructor() {
     super()
   };
@@ -90,4 +90,4 @@ class ProcessDesigner extends Component{
     )
   }
 }
-export default ProcessDesigner
+export default ProcessDesignerCustom

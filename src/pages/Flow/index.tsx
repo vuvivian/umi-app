@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-11 11:05:39
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-12 21:18:07
+ * @LastEditTime: 2020-11-12 22:49:43
  * @Descripttion: 
  * @FilePath: /umi-app/src/pages/Flow/index.tsx
  */
@@ -12,7 +12,7 @@ import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table';
 import { Button, Modal,  Divider, message, Input, Drawer } from 'antd';
 import { TableListItem } from './data.d';
-import ProcessDesigner from '../../components/ProcessDesigner/index'
+import ProcessDesignerFlow from '../../components/ProcessDesigner/index'
 import { queryFlow } from './service';
 
 const Flow: React.FC<{}> = () => {
@@ -106,16 +106,16 @@ const Flow: React.FC<{}> = () => {
       />
       <Drawer
         title="绘制流程"
-        width={1000}
+        width={1800}
         visible={visible}
         closable={false}
-        bodyStyle={{padding: '0px', background: 'red'}}
+        bodyStyle={{padding: '0px'}}
 
       >
-        <ProcessDesigner />
+        <ProcessDesignerFlow />
       </Drawer>
     </PageContainer>
   )
-}
+};
 
-export default Flow
+export default Flow;

@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import ProcessDesignerBasic from '../../components/ProcessDesigner-Basic'
-const WorkFlow = () => {
+const Basic = () => {
   return (
    <div>
       <ProcessDesignerBasic/>
@@ -8,4 +8,4 @@ const WorkFlow = () => {
   )
 }
 
-export default WorkFlow
+export default Basic

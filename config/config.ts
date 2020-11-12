@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-02 00:14:49
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-11 21:12:07
+ * @LastEditTime: 2020-11-12 22:43:55
  * @Descripttion: 
  * @FilePath: /umi-app/config/config.ts
  */
@@ -77,24 +77,30 @@ export default defineConfig({
       path: '/list',
       component: './ListTableList',
     },
+    // {
+    //   name: 'welcome',
+    //   icon: 'table',
+    //   path: '/workflow/basic',
+    //   component: './workflow/basic',
+    // },
+    // {
+    //   name: 'welcome',
+    //   icon: 'table',
+    //   path: '/workflow/custom',
+    //   component: './workflow/custom',
+    // },
     {
-      name: 'list.workflow.basic',
-      icon: 'table',
-      path: '/workflow/basic',
-      component: './workflow/basic',
-    },
-    {
-      name: 'list.workflow.custom',
-      icon: 'table',
-      path: '/workflow/custom',
-      component: './workflow/custom',
-    },
-    {
-      name: 'list.flow',
+      name: 'welcome',
       icon: 'table',
       path: '/flow',
-      component: './flow',
+      component: './Flow',
     },
+    // {
+    //   name: 'welcome',
+    //   icon: 'table',
+    //   path: '/workflow',
+    //   component: './workflow/index',
+    // },
     {
       path: '/',
       redirect: '/welcome',
