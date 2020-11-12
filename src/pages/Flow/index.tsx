@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-11 11:05:39
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-12 01:31:19
+ * @LastEditTime: 2020-11-12 21:18:07
  * @Descripttion: 
  * @FilePath: /umi-app/src/pages/Flow/index.tsx
  */
@@ -99,7 +99,7 @@ const Flow: React.FC<{}> = () => {
           <Button type="primary" >失效</Button>,
         ]}
         columns={columns}
-        // request={(params, sorter, filter) => queryFlow({ ...params, sorter, filter })}
+        request={(params, sorter, filter) => queryFlow({ ...params, sorter, filter })}
         // rowSelection={{
         //   onChange: (_, selectedRows) => setSelectedRows(selectedRows),
         // }}

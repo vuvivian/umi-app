@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-11 23:23:21
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-12 01:44:47
+ * @LastEditTime: 2020-11-12 21:42:53
  * @Descripttion: 最终版
  * @FilePath: /umi-app/src/components/ProcessDesigner/index.js
  */
@@ -11,13 +11,65 @@ import React, { Component } from 'react';
 import { notification , Button, Tooltip, Divider, Tabs} from 'antd';
 import styles from './index.less'
 import  Icon from '../icon';
+import CustomModeler from './custom/customModeler/index'
+
+// 默认 xml
+import getDefaultXml from './utils/defaultxml';
+// 样式文件
+import 'bpmn-js/dist/assets/diagram-js.css';
+import 'bpmn-js/dist/assets/bpmn-font/css/bpmn.css'
+import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-codes.css'
+import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
+import 'bpmn-js-bpmnlint/dist/assets/css/bpmn-js-bpmnlint.css';
+import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css' // 右边工具栏样式
 
 const { TabPane } = Tabs;
 
 class ProcessDesigner extends Component{
-  constructor () {
-    super()
+  constructor (porps) {
+    super(props)
   }
+
+  componentDidMount(){
+    const that = this;
+    this.bpmnModeler = new CustomModeler({
+      container: '#canvas',
+      //添加控制板
+      propertiesPanel: {
+        parent: '#properties-panel',
+      },
+      // additionalModules: [
+        // 左边工具栏以及节点
+        // propertiesProviderModule,
+        // 右边的工具栏
+        // propertiesPanelModule,
+        // lintModule,
+        // CustomPalette
+      // ],
+      // moddleExtensions: {
+        // flowable: flowableModdle,
+        // camunda: camundaModdleDescriptor 用了报错
+      // },
+      height: '100%',
+      width: '100%'
+    });
+    const diagramXML = getDefaultXml();
+    this.renderDiagram(diagramXML);
+  }
+
+  // 渲染 xml 格式
+  renderDiagram = xml => {
+    this.bpmnModeler.importXML(xml, err => {
+      if (err) {
+        console.log(err);
+        console.log(xml);
+        notification.error({
+          message: '提示',
+          description: '导入失败',
+        });
+      }
+    });
+  };
 
   render() {
     return (
