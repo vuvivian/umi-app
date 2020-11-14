@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-11 11:05:39
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-12 22:49:43
+ * @LastEditTime: 2020-11-14 16:01:19
  * @Descripttion: 
  * @FilePath: /umi-app/src/pages/Flow/index.tsx
  */
@@ -21,7 +21,7 @@ const Flow: React.FC<{}> = () => {
 
   const columns: ProColumns<TableListItem>[] = [
     {
-      title: '模版名称',
+      title: '模版名称11',
       dataIndex: 'process_name',
       tip: '规则名称是唯一的 key',
       render: (dom, entity) => {

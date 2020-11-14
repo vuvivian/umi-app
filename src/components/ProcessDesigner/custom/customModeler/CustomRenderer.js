@@ -1,10 +1,10 @@
 /*
  * @Author: vuvivian
- * @Date: 2020-11-12 01:51:25
+ * @Date: 2020-11-12 21:48:20
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-12 01:51:26
+ * @LastEditTime: 2020-11-14 16:05:30
  * @Descripttion: 
- * @FilePath: /umi-app/src/components/ProcessDesigner/custom/customModeler/customRenderer.js
+ * @FilePath: /umi-app/src/components/ProcessDesigner/custom/customModeler/CustomRenderer.js
  */
 /**
  * 继承customRenderer,修改画布上svg图案的颜色

@@ -1,6 +1,7 @@
 import React from 'react';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Card, Alert, Typography } from 'antd';
+import ProcessDesignerFlow from '../components/ProcessDesigner'
 import styles from './Welcome.less';
 
 const CodePreview: React.FC<{}> = ({ children }) => (
@@ -44,5 +45,6 @@ export default (): React.ReactNode => (
       </Typography.Text>
       <CodePreview>yarn add @ant-design/pro-layout</CodePreview>
     </Card>
+    <ProcessDesignerFlow />
   </PageContainer>
 );

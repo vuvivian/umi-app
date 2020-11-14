@@ -1,349 +1,191 @@
 /*
  * @Author: vuvivian
- * @Date: 2020-11-12 01:51:43
+ * @Date: 2020-11-12 21:48:20
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-12 01:54:29
+ * @LastEditTime: 2020-11-14 17:21:38
  * @Descripttion: 
- * @FilePath: /umi-app/src/components/ProcessDesigner/custom/customModeler/customPalette.js
+ * @FilePath: /umi-app/src/components/ProcessDesigner/custom/customModeler/CustomPalette.js
  */
-/**
- * 重写bpmn.js画布节点js，删除部分无用节点，修改节点样式
- */
+
 import {
-  assign,
-  forEach,
-  isArray
+  assign
 } from 'min-dash';
 
-import {
-  is
-} from 'bpmn-js/lib/util/ModelUtil';
-
-import {
-  isEventSubProcess
-} from 'bpmn-js/lib/util/DiUtil.js';
-
-import {
-  isAny
-} from 'bpmn-js/lib/features/modeling/util/ModelingUtil';
-
-import {
-  hasPrimaryModifier
-} from 'diagram-js/lib/util/Mouse';
-
 
 /**
- * A provider for BPMN 2.0 elements context pad
+ * A palette provider for BPMN 2.0 elements.
  */
-export default function ContextPadProvider(
-    config, injector, eventBus,
-    contextPad, modeling, elementFactory,
-    connect, create, popupMenu,
-    canvas, rules, translate) {
+export default function PaletteProvider(
+    palette, create, elementFactory,
+    spaceTool, lassoTool, handTool,
+    globalConnect, translate) {
 
-  config = config || {};
-
-  contextPad.registerProvider(this);
-
-  this._contextPad = contextPad;
-
-  this._modeling = modeling;
-
-  this._elementFactory = elementFactory;
-  this._connect = connect;
+  this._palette = palette;
   this._create = create;
-  this._popupMenu = popupMenu;
-  this._canvas = canvas;
-  this._rules = rules;
+  this._elementFactory = elementFactory;
+  this._spaceTool = spaceTool;
+  this._lassoTool = lassoTool;
+  this._handTool = handTool;
+  this._globalConnect = globalConnect;
   this._translate = translate;
 
-  if (config.autoPlace !== false) {
-    this._autoPlace = injector.get('autoPlace', false);
-  }
-
-  eventBus.on('create.end', 250, function(event) {
-    let context = event.context,
-        shape = context.shape;
-
-    if (!hasPrimaryModifier(event) || !contextPad.isOpen(shape)) {
-      return;
-    }
-
-    let entries = contextPad.getEntries(shape);
-
-    if (entries.replace) {
-      entries.replace.action.click(event, shape);
-    }
-  });
+  palette.registerProvider(this);
 }
 
-ContextPadProvider.$inject = [
-  'config.contextPad',
-  'injector',
-  'eventBus',
-  'contextPad',
-  'modeling',
-  'elementFactory',
-  'connect',
+PaletteProvider.$inject = [
+  'palette',
   'create',
-  'popupMenu',
-  'canvas',
-  'rules',
+  'elementFactory',
+  'spaceTool',
+  'lassoTool',
+  'handTool',
+  'globalConnect',
   'translate'
 ];
 
 
-ContextPadProvider.prototype.getContextPadEntries = function(element) {
+PaletteProvider.prototype.getPaletteEntries = function() {
 
-  let contextPad = this._contextPad,
-      modeling = this._modeling,
-
-      elementFactory = this._elementFactory,
-      connect = this._connect,
+  var actions = {},
       create = this._create,
-      popupMenu = this._popupMenu,
-      canvas = this._canvas,
-      rules = this._rules,
-      autoPlace = this._autoPlace,
+      elementFactory = this._elementFactory,
+      // spaceTool = this._spaceTool,
+      lassoTool = this._lassoTool,
+      handTool = this._handTool,
+      globalConnect = this._globalConnect,
       translate = this._translate;
 
-  let actions = {};
+  function createAction(type, group, className, title, options) {
 
-  if (element.type === 'label') {
-    return actions;
-  }
-
-  let businessObject = element.businessObject;
-
-  function startConnect(event, element) {
-    connect.start(event, element);
-  }
-
-  function removeElement() {
-    modeling.removeElements([ element ]);
-  }
-
-  function getReplaceMenuPosition(element) {
-
-    const Y_OFFSET = 5;
-
-    let diagramContainer = canvas.getContainer(),
-        pad = contextPad.getPad(element).html;
-
-    let diagramRect = diagramContainer.getBoundingClientRect(),
-        padRect = pad.getBoundingClientRect();
-
-    let top = padRect.top - diagramRect.top;
-    let left = padRect.left - diagramRect.left;
-
-    let pos = {
-      x: left,
-      y: top + padRect.height + Y_OFFSET
-    };
-
-    return pos;
-  }
-
-
-  /**
-   * Create an append action
-   *
-   * @param {string} type
-   * @param {string} className
-   * @param {string} [title]
-   * @param {Object} [options]
-   *
-   * @return {Object} descriptor
-   */
-  function appendAction(type, className, title, options) {
-
-    if (typeof title !== 'string') {
-      options = title;
-      title = translate('Append {type}', { type: type.replace(/^bpmn:/, '') });
-    }
-
-    function appendStart(event, element) {
-
-      let shape = elementFactory.createShape(assign({ type: type }, options));
-      create.start(event, shape, {
-        source: element
-      });
-    }
-
-
-    let append = autoPlace ? function(event, element) {
+    function createListener(event) {
       let shape = elementFactory.createShape(assign({ type: type }, options));
 
-      autoPlace.append(element, shape);
-    } : appendStart;
+      if (options) {
+        shape.businessObject.di.isExpanded = options.isExpanded;
+      }
 
+      create.start(event, shape);
+    }
+
+    let shortType = type.replace(/^bpmn:/, '');
 
     return {
-      group: 'model',
+      group: group,
       className: className,
-      title: title,
+      title: title || translate('Create {type}', { type: shortType }),
       action: {
-        dragstart: appendStart,
-        click: append
+        dragstart: createListener,
+        click: createListener
       }
     };
   }
-
-
-  if (is(businessObject, 'bpmn:FlowNode')) {
-
-    if (is(businessObject, 'bpmn:EventBasedGateway')) {
-      assign(actions, {});
-    } else
-
-    if (isEventType(businessObject, 'bpmn:BoundaryEvent', 'bpmn:CompensateEventDefinition')) {
-      assign(actions, {});
-    } else if (!is(businessObject, 'bpmn:EndEvent') &&
-      //符合条件的这些节点点击时不展示右侧pannel
-      !is(businessObject, 'bpmn:BoundaryEvent') &&
-      !businessObject.isForCompensation &&
-      !isEventType(businessObject, 'bpmn:IntermediateThrowEvent', 'bpmn:LinkEventDefinition') &&
-      !isEventSubProcess(businessObject)) {
-
-      assign(actions, {
-        // 创建结束事件
-        'append.end-event': appendAction(
-          'bpmn:EndEvent',
-          'bpmn-icon-end-event-none',
-          translate('Append EndEvent')
-        ),
-        // 创建用户任务
-        'append.user-task': appendAction(
-            'bpmn:UserTask',
-            'iconfont iconshenpijiedian1',
-            translate('Append UserTask')
-          ),
-        // 创建互斥网关
-        'append.gateway': appendAction(
-          'bpmn:ExclusiveGateway',
-          'iconfont iconhuchiwangguan',
-          translate('Append ExclusiveGateway')
-        ),
-        // 创建并行网关
-        'append.parallel-gateway': appendAction(
-          'bpmn:ParallelGateway',
-          'iconfont iconbinghangwangguan',
-          translate('Append ParallelGateway')
-        ),
-      });
-    }
-  }
-  
-  /** 
-   * 是否展示小扳手图标
-   * 审批节点小扳手暂时不允许出现（不展示子流程）
+  /**
+   * 创建子节点按钮功能
    */
-  if (!popupMenu.isEmpty(element, 'bpmn-replace') 
-      && element.type !== 'bpmn:SequenceFlow' 
-      && element.type !== 'bpmn:StartEvent'
-      && element.type !== 'bpmn:EndEvent' 
-      && element.type !== 'bpmn:BoundaryEvent' 
-      && element.type !== 'bpmn:UserTask' 
-      ) {
-    // Replace menu entry
-    assign(actions, {
-      'replace': {
-        group: 'connect',
-        className: 'bpmn-icon-screw-wrench',
-        title: translate('Change type'),
-        action: {
-          click: function(event, element) {
-            //节点切换时，将name清掉
-            element.businessObject.name='';
-            let position = assign(getReplaceMenuPosition(element), {
-              cursor: { x: event.x, y: event.y }
-            });
+  function createSubprocess(event) {
+    let subProcess = elementFactory.createShape({
+      type: 'bpmn:SubProcess',
+      x: 0,
+      y: 0,
+      isExpanded: true
+    });
 
-            popupMenu.open(element, 'bpmn-replace', position);
-          }
-        }
+    let startEvent = elementFactory.createShape({
+      type: 'bpmn:StartEvent',
+      x: 40,
+      y: 82,
+      parent: subProcess
+    });
+
+    create.start(event, [ subProcess, startEvent ], {
+      hints: {
+        autoSelect: [ startEvent ]
       }
     });
   }
 
-  if (isAny(businessObject, [
-    'bpmn:FlowNode',
-    'bpmn:InteractionNode',
-    'bpmn:DataObjectReference',
-    'bpmn:DataStoreReference'
-  ]) && element.type !== 'bpmn:BoundaryEvent') {
+  // function createParticipant(event) {
+  //   create.start(event, elementFactory.createParticipantShape());
+  // }
 
-    assign(actions, {
-      // 创建文本框 暂时注掉
-      // 'append.text-annotation': appendAction('bpmn:TextAnnotation', 'bpmn-icon-text-annotation',translate('Append TextAnnotation')),
-
-      'connect': {
-        group: 'connect',
-        className: 'iconfont iconbianzu4',
-        title: translate('Connect using ' +
-                  (businessObject.isForCompensation ? '' : 'Sequence/MessageFlow or ') +
-                  'Association'),
-        action: {
-          click: startConnect,
-          dragstart: startConnect
+  assign(actions, {
+    // 创建手形拖拽工具
+    'hand-tool': {
+      group: 'tools',
+      className: 'iconfont iconzhuashou entry-modifier',
+      title: translate('Activate the hand tool'),
+      action: {
+        click: function(event) {
+          handTool.activateHand(event);
         }
       }
-    });
-  }
+    },
 
-  if (isAny(businessObject, [ 'bpmn:DataObjectReference', 'bpmn:DataStoreReference' ])) {
-    assign(actions, {
-      'connect': {
-        group: 'connect',
-        className: 'bpmn-icon-connection-multi',
-        title: translate('Connect using DataInputAssociation'),
-        action: {
-          click: startConnect,
-          dragstart: startConnect
+    // 创建选择工具
+    'lasso-tool': {
+      group: 'tools',
+      className: 'iconfont iconkuangxuan entry-modifier',
+      title: translate('Activate the lasso tool'),
+      action: {
+        click: function(event) {
+          lassoTool.activateSelection(event);
         }
       }
-    });
-  }
+    },
 
-  // delete element entry, only show if allowed by rules
-  var deleteAllowed = rules.allowed('elements.delete', { elements: [ element ] });
+    // 创建开始节点
+    'create.start-event': createAction(
+      'bpmn:StartEvent', 'event', 'bpmn-icon-start-event-none entry-modifier',
+      translate('Create StartEvent')
+    ),
+    
+    // 创建结束节点
+    'create.end-event': createAction(
+      'bpmn:EndEvent', 'event', 'bpmn-icon-end-event-none entry-modifier',
+      translate('Create EndEvent')
+    ),
 
-  if (isArray(deleteAllowed)) {
+    // 创建互斥网关
+    'create.exclusive-gateway': createAction(
+      'bpmn:ExclusiveGateway', 'gateway', 'iconfont iconhuchiwangguan entry-modifier',
+      translate('Create ExclusiveGateway')
+    ),
 
-    // was the element returned as a deletion candidate?
-    deleteAllowed = deleteAllowed[0] === element;
-  }
+     //   创建并行网关
+    'create.parallel-gateway': createAction(
+      'bpmn:ParallelGateway', 'gateway', 'iconfont iconbinghangwangguan entry-modifier',
+      translate('Create ParallelGateway')
+    ),
 
-  if (deleteAllowed && element.type !== 'bpmn:BoundaryEvent') {
-    assign(actions, {
-      'delete': {
-        group: 'connect',
-        className: 'bpmn-icon-trash',
-        title: translate('Remove'),
-        action: {
-          click: removeElement
+    //   创建用户节点
+      'create.user-task': createAction(
+          'bpmn:UserTask', 'activity', 'iconfont iconshenpijiedian1 entry-modifier',
+          translate('Create UserTask')
+      ),
+    /**
+     * 创建子流程
+     */
+    'create.subprocess-expanded': {
+      group: 'activity',
+      className: 'iconfont iconziliucheng-2 entry-modifier',
+      title: translate('Create expanded SubProcess'),
+      action: {
+        dragstart: createSubprocess,
+        click: createSubprocess
+      }
+    },
+    // 创建连接线
+  'global-connect-tool': {
+      // group: 'tools',
+      className: 'iconfont iconbianzu4 entry-modifier',
+      title: translate('Activate the global connect tool'),
+      action: {
+        click: function(event) {
+          globalConnect.toggle(event);
         }
       }
-    });
-  }
+    },
+  });
 
   return actions;
 };
-
-
-// helpers /////////
-
-function isEventType(eventBo, type, definition) {
-
-  var isType = eventBo.$instanceOf(type);
-  var isDefinition = false;
-
-  var definitions = eventBo.eventDefinitions || [];
-  forEach(definitions, function(def) {
-    if (def.$type === definition) {
-      isDefinition = true;
-    }
-  });
-
-  return isType && isDefinition;
-}

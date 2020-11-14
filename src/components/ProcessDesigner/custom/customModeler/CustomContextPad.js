@@ -2,12 +2,9 @@
  * @Author: vuvivian
  * @Date: 2020-11-12 01:53:55
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-12 01:54:16
+ * @LastEditTime: 2020-11-14 17:21:30
  * @Descripttion: 
  * @FilePath: /umi-app/src/components/ProcessDesigner/custom/customModeler/CustomContextPad.js
- */
-/**
- * 重写bpmn.js画布节点js，删除部分无用节点，修改节点样式
  */
 import {
   assign,

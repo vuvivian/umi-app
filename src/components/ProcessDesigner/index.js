@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-11 23:23:21
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-12 23:34:10
+ * @LastEditTime: 2020-11-14 16:49:39
  * @Descripttion: 最终版
  * @FilePath: /umi-app/src/components/ProcessDesigner/index.js
  */
@@ -11,6 +11,7 @@ import React, { Component } from 'react';
 import { notification , Button, Tooltip, Divider, Tabs, Form, Input, Checkbox, Switch, Select, message} from 'antd';
 import styles from './index.less'
 import  Icon from '../icon';
+import _ from 'underscore';
 import CustomModeler from './custom/customModeler/index'
 import customTranslate from './custom/customtranslate/customTranslate';
 import camundaModdleDescriptor from './custom/descriptiors/flowable.json'
@@ -32,6 +33,7 @@ class ProcessDesignerFlow extends Component{
   }
 
   componentDidMount(){
+    console.log('aaaa')
     const that = this;
     this.bpmnModeler = new CustomModeler({
       container: '#canvas',
