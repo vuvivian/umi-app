@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-11 23:23:21
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-14 16:49:39
+ * @LastEditTime: 2020-11-15 00:58:49
  * @Descripttion: 最终版
  * @FilePath: /umi-app/src/components/ProcessDesigner/index.js
  */
@@ -29,7 +29,10 @@ const { TabPane } = Tabs;
 
 class ProcessDesignerFlow extends Component{
   constructor (props) {
-    super(props)
+    super(props);
+    this.state = {
+      currentElement: null,
+    }
   }
 
   componentDidMount(){
@@ -67,6 +70,9 @@ class ProcessDesignerFlow extends Component{
     });
     const diagramXML = getDefaultXml();
     this.renderDiagram(diagramXML);
+    // bang
+    this.addModelerListener();
+    this.addEventBusListener();
   }
 
   // 渲染 xml 格式
@@ -83,6 +89,49 @@ class ProcessDesignerFlow extends Component{
     });
   };
 
+  // modeler事件绑定
+  addModelerListener = () => {
+    const bpmnjs = this.bpmnModeler
+    const that = this
+    // 这里我是用了一个forEach给modeler上添加要绑定的事件
+    const events = ['shape.added', 'shape.move.end', 'shape.removed', 'connect.end', 			'connect.move']
+    events.forEach(function(event) {
+      that.bpmnModeler.on(event, e => {
+        console.log('model', event, e)
+        var elementRegistry = bpmnjs.get('elementRegistry')
+        var shape = e.element ? elementRegistry.get(e.element.id) : e.shape
+        console.log('model', shape)
+      })
+    })
+  };
+
+  // 元素事件绑定
+  addEventBusListener = () => {
+    let that = this
+    const eventBus = this.bpmnModeler.get('eventBus') // 需要使用eventBus
+    const eventTypes = ['element.click', 'element.changed'] // 需要监听的事件集合
+    eventTypes.forEach(function(eventType) {
+      eventBus.on(eventType, function(e) {
+        if (!e || e.element.type == 'bpmn:Process') return // 这里我的根元素是bpmn:Process
+        console.log('bbus', e)
+        const elementRegistry = that.bpmnModeler.get('elementRegistry')
+        const shape = elementRegistry.get(e.element.id) // 传递id进去
+        console.log(shape) // {Shape}
+        that.setState({
+          currentElement: shape
+        })
+      })
+    })
+  };
+
+  // 更新元素属性
+  updateProperties = (properties) => {
+    const {currentElement} = this.state;
+    const modeling = this.bpmnModeler.get('modeling');
+    modeling.updateProperties(currentElement, properties);
+  };
+
+  // 
   //后退方法
   undo = () => {
     this.bpmnModeler.get('commandStack').undo();
@@ -102,7 +151,8 @@ class ProcessDesignerFlow extends Component{
     if(selectionList.length > 1){
       this.bpmnModeler.get('alignElements').trigger(selectionList, type);
     }else{
-      message.warn(this.translate('Please select at least two elements'));
+      message.warn('Please select at least two elements');
+      // message.warn(this.translate('Please select at least two elements'));
     }
   };
 
@@ -162,7 +212,25 @@ class ProcessDesignerFlow extends Component{
 
   };
 
+  // 更新属性
+  changeField = (e, type) => {
+    // 如果是根节点 更行流程名称
+    // 如果是元素 更新元素属性
+    const {currentElement} = this.state;
+    const value = e.target.value;
+    let properties = {};
+    console.log('aa', value, type)
+    if (currentElement) {
+      currentElement[type] = value;
+      currentElement.businessObject[type] = value;
+      properties[type] = value;
+      this.updateProperties(properties);
+    }
+  };
+
   render() {
+    const {currentElement} = this.state;
+    console.log(currentElement, currentElement&&currentElement.gatewayList)
     return (
       <div className={styles.designerContainer}>
         {/* 流程图 */}
@@ -240,42 +308,66 @@ class ProcessDesignerFlow extends Component{
                 // onFinishFailed={onFinishFailed}
                 >
                   <Form.Item label="流程名称" name="name" rules={[{ required: true, message: 'Please input your username!' }]} >
-                    <Input />
+                    <Input onChange={(e) => {this.changeField(e, 'name')}}/>
+                  </Form.Item>
+                  <Form.Item label="text" name="text" rules={[{ required: true, message: 'Please input your username!' }]} >
+                    <Input onChange={(e) => {this.changeField(e, 'text')}}/>
                   </Form.Item>
                   <Form.Item label="描述" name="description" rules={[{ required: true, message: 'Please input your username!' }]} >
-                    <Input />
+                    <Input onChange={(e) => {this.changeField(e, 'description')}}/>
                   </Form.Item>
-                  <Form.Item label="流程属性" name="description" rules={[{ required: true, message: 'Please input your username!' }]} >
-                    <Checkbox.Group>
+                  <Form.Item label="流程属性" name="shuxing" rules={[{ required: true, message: 'Please input your username!' }]} >
+                    <Checkbox.Group onChange={(e) => {this.changeField(e, 'shuxing')}}>
                       {/* <Checkbox value="A">与上一个节点审批人相同时，自动跳过</Checkbox> */}
-                      <Checkbox value="B">匹配不到有效审批人时，自动审批通过</Checkbox>
-                      <Checkbox value="C">审批人与制单人相同时，自动审批通过</Checkbox>
-                      <Checkbox value="D">审批人与制单人相同时，自动审批通过</Checkbox>
+                      <Checkbox value="autoPassSame">匹配不到有效审批人时，自动审批通过</Checkbox>
+                      <Checkbox value="autoPassEmpty">审批人与制单人相同时，自动审批通过</Checkbox>
+                      <Checkbox value="autoPassPerson">审批人与制单人相同时，自动审批通过</Checkbox>
                     </Checkbox.Group>
                   </Form.Item>
-                  <Form.Item label="审批人" name="description" rules={[{ required: true, message: 'Please input your username!' }]} >
-                    <Input />
+                  {currentElement && currentElement.type === 'bpmn:UserTask' ? 
+                    (<>
+                       <Form.Item label="审批人" name="description" rules={[{ required: true, message: 'Please input your username!' }]} >
+                          <Input />
+                        </Form.Item>
+                        <Form.Item label="审批类型" name="executeType" rules={[{ required: true, message: 'Please input your username!' }]} >
+                          <Select onChange={(e) => {this.changeField(e, 'executeType')}}>
+                            <Select.Option value="0">或签(多人审批时，一人通过即可)</Select.Option>
+                            <Select.Option value="1">会签(多人审批时，需所有人通过)</Select.Option>
+                            <Select.Option value="2">按比例通过</Select.Option>
+                          </Select>
+                        </Form.Item>
+                        <Form.Item label="审批类型" name="radio" rules={[{ required: true, message: 'Please input your username!' }]} >
+                          需要<Input onChange={(e) => {this.changeField(e, 'radio')}}/>%的人通过才算通过
+                        </Form.Item>
+                        <Form.Item label="节点按钮" name="description" rules={[{ required: true, message: 'Please input your username!' }]} >
+                            <Checkbox.Group onChange={(e) => {this.changeField(e, 'nodeButton')}}>
+                                <Checkbox value="0" disabled>同意</Checkbox>
+                                <Checkbox value="1" disabled>退回</Checkbox>
+                                <Checkbox value="2" disabled>撤销</Checkbox>
+                                <Checkbox value="7">否决</Checkbox>
+                                <Checkbox value="4">加签</Checkbox>
+                                <Checkbox value="5">传阅</Checkbox>
+                                <Checkbox value="3">查看全流程</Checkbox>
+                              </Checkbox.Group>
+                        </Form.Item>
+                        <Form.Item label="退回规则" name="returnValue" rules={[{ required: true, message: 'Please input your username!' }]} >
+                          < Switch defaultChecked onChange={(e)=>{this.changeField(e, 'returnValue')}}/> 退回时重新提交至本节点
+                          <span>存在分支和审批节点服务调用的情况下，请不要使用此功能</span>
+                        </Form.Item>
+                    </>)
+                    : 
+                    null
+                  }
+                  {/* todo 并行分支条件 */}
+                  <h2><b>分支条件</b></h2>
+                  <Form.Item label="排他分支" name="description" rules={[{ required: true, message: 'Please input your username!' }]} >
+                    {/* 遍历element. */}
+                    <Input onChange={(e) => {this.changeField(e, 'description')}}/>
                   </Form.Item>
-                  <Form.Item label="审批类型" name="description" rules={[{ required: true, message: 'Please input your username!' }]} >
-                    <Select>
-                      <Select.Option value="jack">或签(多人审批时，一人通过即可)</Select.Option>
-                      <Select.Option value="lucy">会签(多人审批时，需所有人通过)</Select.Option>
-                      <Select.Option value="Yiminghe">按比例通过</Select.Option>
+                  <Form.Item label="默认分支(不满足分支条件时)" name="default" rules={[{ required: true, message: 'Please input your username!' }]} >
+                    <Select onChange={(e) => {this.changeField(e, 'default')}}>
+                      <Select.Option value="2">默认</Select.Option>
                     </Select>
-                  </Form.Item>
-                  <Form.Item label="节点按钮" name="description" rules={[{ required: true, message: 'Please input your username!' }]} >
-                      <Checkbox.Group>
-                          <Checkbox value="A">同意</Checkbox>
-                          <Checkbox value="B">退回</Checkbox>
-                          <Checkbox value="C">撤销</Checkbox>
-                          <Checkbox value="D">否决</Checkbox>
-                          <Checkbox value="E">加签</Checkbox>
-                          <Checkbox value="F">传阅</Checkbox>
-                          <Checkbox value="Gs">查看全流程</Checkbox>
-                        </Checkbox.Group>
-                  </Form.Item>
-                  <Form.Item label="退回规则" name="description" rules={[{ required: true, message: 'Please input your username!' }]} >
-                  < Switch defaultChecked /> 退回时重新提交至本节点
                   </Form.Item>
               </Form>
             </TabPane>

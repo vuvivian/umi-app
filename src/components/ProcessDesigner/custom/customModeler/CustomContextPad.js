@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-12 01:53:55
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-14 17:21:30
+ * @LastEditTime: 2020-11-15 01:02:32
  * @Descripttion: 
  * @FilePath: /umi-app/src/components/ProcessDesigner/custom/customModeler/CustomContextPad.js
  */
@@ -186,9 +186,7 @@ ContextPadProvider.prototype.getContextPadEntries = function(element) {
     };
   }
 
-
   if (is(businessObject, 'bpmn:FlowNode')) {
-
     if (is(businessObject, 'bpmn:EventBasedGateway')) {
       assign(actions, {});
     } else
