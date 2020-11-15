@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-11 23:23:21
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-15 00:58:49
+ * @LastEditTime: 2020-11-15 13:28:05
  * @Descripttion: 最终版
  * @FilePath: /umi-app/src/components/ProcessDesigner/index.js
  */
@@ -10,6 +10,7 @@
 import React, { Component } from 'react';
 import { notification , Button, Tooltip, Divider, Tabs, Form, Input, Checkbox, Switch, Select, message} from 'antd';
 import styles from './index.less'
+import { DeleteOutlined , ShareAltOutlined, CloseCircleOutlined} from '@ant-design/icons';
 import  Icon from '../icon';
 import _ from 'underscore';
 import CustomModeler from './custom/customModeler/index'
@@ -25,6 +26,8 @@ import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 import 'bpmn-js-bpmnlint/dist/assets/css/bpmn-js-bpmnlint.css';
 import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css' // 右边工具栏样式
 
+// 组件
+import {AssignSelect} from './components'
 const { TabPane } = Tabs;
 
 class ProcessDesignerFlow extends Component{
@@ -32,6 +35,9 @@ class ProcessDesignerFlow extends Component{
     super(props);
     this.state = {
       currentElement: null,
+      mainTableFields: [],
+      visible: false,
+      assignList: null
     }
   }
 
@@ -209,6 +215,18 @@ class ProcessDesignerFlow extends Component{
 
   // 保存
   save = () => {
+    // todo 1流程校验  2是否设置为主流程
+    this.bpmnModeler.saveXML({ format: true }, (err, xml)=> {
+      let rootElement = this.bpmnModeler.get('canvas').getRootElement();
+      console.log('rootElement', rootElement, xml);
+      let data = {
+        'setMainProcess': true,
+        'process_name': rootElement.name || '',
+        'process_key': rootElement.id,
+        'process_xml': JSON.stringify(xml), 
+        'description': rootElement.description
+      }
+    })
 
   };
 
@@ -216,8 +234,9 @@ class ProcessDesignerFlow extends Component{
   changeField = (e, type) => {
     // 如果是根节点 更行流程名称
     // 如果是元素 更新元素属性
+    console.log(e, 'e')
     const {currentElement} = this.state;
-    const value = e.target.value;
+    const value =e.target.value || e;
     let properties = {};
     console.log('aa', value, type)
     if (currentElement) {
@@ -228,8 +247,37 @@ class ProcessDesignerFlow extends Component{
     }
   };
 
+  // todo 分支条件获取表头字段接口
+  getMainTableFields = () => {
+    this.setState({
+      mainTableFields: []
+    })
+  };
+
+  openAssign = () => {
+    this.setState({
+      visible: true
+    })
+  };
+  handleOk = (assign) => {
+    console.log(assign, 'asss');
+    const names = _.pluck(assign, 'name');
+    const ids = _.pluck(assign, 'id');
+    // console.log(names, 'names')
+    this.setState({
+      assignList:  assign
+    })
+    this.changeField(ids,'candidateUsers');
+    this.handleCancel();
+  };
+  handleCancel = () => {
+    this.setState({
+      visible: false
+    })
+  };
+
   render() {
-    const {currentElement} = this.state;
+    const {currentElement, visible, assignList} = this.state;
     console.log(currentElement, currentElement&&currentElement.gatewayList)
     return (
       <div className={styles.designerContainer}>
@@ -327,7 +375,23 @@ class ProcessDesignerFlow extends Component{
                   {currentElement && currentElement.type === 'bpmn:UserTask' ? 
                     (<>
                        <Form.Item label="审批人" name="description" rules={[{ required: true, message: 'Please input your username!' }]} >
-                          <Input />
+                          {
+                            <div className={styles.assignContainer}>
+                              <div className={styles.assignItemContainer}>
+                                {
+                                  _.map(assignList, (i) => {
+                                    return (
+                                      <div className={styles.assignItem}>
+                                        <span>{i}</span>
+                                        <span><CloseCircleOutlined /></span>
+                                      </div>
+                                    )
+                                  })
+                                }
+                              </div>
+                              <ShareAltOutlined onClick={this.openAssign}/>
+                            </div>
+                          }
                         </Form.Item>
                         <Form.Item label="审批类型" name="executeType" rules={[{ required: true, message: 'Please input your username!' }]} >
                           <Select onChange={(e) => {this.changeField(e, 'executeType')}}>
@@ -373,6 +437,11 @@ class ProcessDesignerFlow extends Component{
             </TabPane>
           </Tabs>
         </div>
+        <AssignSelect 
+          visible={visible}
+          onOk={this.handleOk}
+          onCancel = {this.handleCancel}
+          />         
       </div>
     )
   }

@@ -37,6 +37,28 @@
   border-radius: 4px;
   padding: 0 10px;
   background-color: #ffffff;
+  .assignContainer {
+    height: 30px;
+    line-height: 30px;
+    display: flex;
+    justify-content: space-between;
+    padding: 5px;
+    border: 1px solid #ccc;
+    .assignItemContainer {
+        height: 100%;
+        display: flex;
+    }
+    .assignItem {
+        height: 100%;
+        line-height: 100%;
+        display: flex;
+        justify-content: space-between;
+        background-color: #03a9f429;
+        padding: 2px;
+        margin-right: 5px;
+        border-radius: 4px;
+    }
+  }
 }
 .canvas {
   height: 100%;
@@ -44,6 +66,8 @@
   border-top: 1px solid #dcdee2;
   background:url('./img/grid.svg') 0 10px;
 }
+
+
 
  .djs-overlay-container {
   z-index: 99;
