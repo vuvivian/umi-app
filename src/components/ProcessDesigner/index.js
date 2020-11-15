@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-11 23:23:21
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-15 13:28:05
+ * @LastEditTime: 2020-11-15 23:53:35
  * @Descripttion: 最终版
  * @FilePath: /umi-app/src/components/ProcessDesigner/index.js
  */
@@ -26,6 +26,9 @@ import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 import 'bpmn-js-bpmnlint/dist/assets/css/bpmn-js-bpmnlint.css';
 import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css' // 右边工具栏样式
 
+
+import { fakeFlowCreate } from './services/index';
+
 // 组件
 import {AssignSelect} from './components'
 const { TabPane } = Tabs;
@@ -37,12 +40,11 @@ class ProcessDesignerFlow extends Component{
       currentElement: null,
       mainTableFields: [],
       visible: false,
-      assignList: null
+      assignList: null,
     }
   }
 
   componentDidMount(){
-    console.log('aaaa')
     const that = this;
     this.bpmnModeler = new CustomModeler({
       container: '#canvas',
@@ -74,9 +76,14 @@ class ProcessDesignerFlow extends Component{
       height: '100%',
       width: '100%'
     });
-    const diagramXML = getDefaultXml();
+    // 
+    let diagramXML = null;
+    if (this.props.editFlow) {
+      diagramXML= JSON.parse(this.props.editFlow.processXmlStr);
+    } else {
+      diagramXML = getDefaultXml();
+    }
     this.renderDiagram(diagramXML);
-    // bang
     this.addModelerListener();
     this.addEventBusListener();
   }
@@ -103,7 +110,6 @@ class ProcessDesignerFlow extends Component{
     const events = ['shape.added', 'shape.move.end', 'shape.removed', 'connect.end', 			'connect.move']
     events.forEach(function(event) {
       that.bpmnModeler.on(event, e => {
-        console.log('model', event, e)
         var elementRegistry = bpmnjs.get('elementRegistry')
         var shape = e.element ? elementRegistry.get(e.element.id) : e.shape
         console.log('model', shape)
@@ -119,10 +125,8 @@ class ProcessDesignerFlow extends Component{
     eventTypes.forEach(function(eventType) {
       eventBus.on(eventType, function(e) {
         if (!e || e.element.type == 'bpmn:Process') return // 这里我的根元素是bpmn:Process
-        console.log('bbus', e)
         const elementRegistry = that.bpmnModeler.get('elementRegistry')
         const shape = elementRegistry.get(e.element.id) // 传递id进去
-        console.log(shape) // {Shape}
         that.setState({
           currentElement: shape
         })
@@ -214,11 +218,10 @@ class ProcessDesignerFlow extends Component{
   };
 
   // 保存
-  save = () => {
+  save = () =>  {
     // todo 1流程校验  2是否设置为主流程
-    this.bpmnModeler.saveXML({ format: true }, (err, xml)=> {
+     this.bpmnModeler.saveXML({ format: true }, async (err, xml)=> {
       let rootElement = this.bpmnModeler.get('canvas').getRootElement();
-      console.log('rootElement', rootElement, xml);
       let data = {
         'setMainProcess': true,
         'process_name': rootElement.name || '',
@@ -226,6 +229,7 @@ class ProcessDesignerFlow extends Component{
         'process_xml': JSON.stringify(xml), 
         'description': rootElement.description
       }
+      let res = await fakeFlowCreate(data);
     })
 
   };
@@ -238,7 +242,6 @@ class ProcessDesignerFlow extends Component{
     const {currentElement} = this.state;
     const value =e.target.value || e;
     let properties = {};
-    console.log('aa', value, type)
     if (currentElement) {
       currentElement[type] = value;
       currentElement.businessObject[type] = value;
@@ -260,10 +263,8 @@ class ProcessDesignerFlow extends Component{
     })
   };
   handleOk = (assign) => {
-    console.log(assign, 'asss');
     const names = _.pluck(assign, 'name');
     const ids = _.pluck(assign, 'id');
-    // console.log(names, 'names')
     this.setState({
       assignList:  assign
     })
@@ -278,7 +279,6 @@ class ProcessDesignerFlow extends Component{
 
   render() {
     const {currentElement, visible, assignList} = this.state;
-    console.log(currentElement, currentElement&&currentElement.gatewayList)
     return (
       <div className={styles.designerContainer}>
         {/* 流程图 */}
