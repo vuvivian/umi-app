@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-01 20:54:41
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-15 21:48:55
+ * @LastEditTime: 2020-11-17 20:26:38
  * @Descripttion: 
  * @FilePath: /umi-app/src/utils/utils.ts
  */
@@ -40,3 +40,7 @@ export const handleTableResponse = (response: any) => {
     total: total,
   };
 };
+
+export function isNotEmptyArray(obj:any) {
+  return Array.isArray(obj) && obj.length > 0
+}
