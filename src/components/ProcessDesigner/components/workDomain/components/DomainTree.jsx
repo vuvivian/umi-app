@@ -8,8 +8,28 @@ import _ from 'underscore';
 
 
 const DomainTree = ({time, name, content, avatar, subComment}) => {
+  const addTree = () => {
+
+  };
+  const removeTree = () => {
+
+  };
+  const addTreeChild = () => {
+
+  };
+
+  const addLeaf = () => {
+
+  };
+  const removeLeaf = () => {
+
+  };
+  const addChild = () => {
+
+  };
+
   return (
-    <DomainNode >
+    <DomainNode handleAdd={addTree} handleRemove={removeTree} handleAddChild={addTreeChild}>
       <div>
         <Select defaultValue="lucy" style={{ width: 160 }} bordered={false}>
           <Select.Option value="jack">满足下面所有条件</Select.Option>
@@ -22,7 +42,7 @@ const DomainTree = ({time, name, content, avatar, subComment}) => {
             if (child.subComment) {
             return (<DomainTree key={index} {...child}>1</DomainTree>)
             } else {
-              return (<DomainLeaf key={index} {...child}>123</DomainLeaf>)
+              return (<DomainLeaf key={index} {...child} addLeaf={addLeaf} removeLeaf={removeLeaf} addChild={addChild}>123</DomainLeaf>)
             }
           })
         }

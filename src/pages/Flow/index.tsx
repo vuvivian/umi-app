@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-11 11:05:39
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-15 23:52:25
+ * @LastEditTime: 2020-11-19 22:42:13
  * @Descripttion: 
  * @FilePath: /umi-app/src/pages/Flow/index.tsx
  */
@@ -141,7 +141,7 @@ const Flow: React.FC<{}> = () => {
       />
       <Drawer
         title="绘制流程"
-        width={1800}
+        width={1240}
         visible={visible}
         closable={true}
         onClose={onCloseDrawer}
