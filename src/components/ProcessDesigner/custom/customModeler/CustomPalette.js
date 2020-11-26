@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-12 21:48:20
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-14 17:21:38
+ * @LastEditTime: 2020-11-25 20:52:51
  * @Descripttion: 
  * @FilePath: /umi-app/src/components/ProcessDesigner/custom/customModeler/CustomPalette.js
  */
@@ -10,7 +10,6 @@
 import {
   assign
 } from 'min-dash';
-
 
 /**
  * A palette provider for BPMN 2.0 elements.
@@ -20,17 +19,17 @@ export default function PaletteProvider(
     spaceTool, lassoTool, handTool,
     globalConnect, translate) {
 
-  this._palette = palette;
-  this._create = create;
-  this._elementFactory = elementFactory;
-  this._spaceTool = spaceTool;
-  this._lassoTool = lassoTool;
-  this._handTool = handTool;
-  this._globalConnect = globalConnect;
-  this._translate = translate;
+    this._palette = palette;
+    this._create = create;
+    this._elementFactory = elementFactory;
+    this._spaceTool = spaceTool;
+    this._lassoTool = lassoTool;
+    this._handTool = handTool;
+    this._globalConnect = globalConnect;
+    this._translate = translate;
 
-  palette.registerProvider(this);
-}
+    palette.registerProvider(this);
+  }
 
 PaletteProvider.$inject = [
   'palette',
@@ -72,7 +71,8 @@ PaletteProvider.prototype.getPaletteEntries = function() {
     return {
       group: group,
       className: className,
-      title: title || translate('Create {type}', { type: shortType }),
+      title: title,
+      // title: title || translate('Create {type}', { type: shortType }),
       action: {
         dragstart: createListener,
         click: createListener
@@ -125,7 +125,7 @@ PaletteProvider.prototype.getPaletteEntries = function() {
     'lasso-tool': {
       group: 'tools',
       className: 'iconfont iconkuangxuan entry-modifier',
-      title: translate('Activate the lasso tool'),
+      title: 'Activate the lasso tool',
       action: {
         click: function(event) {
           lassoTool.activateSelection(event);
@@ -136,35 +136,33 @@ PaletteProvider.prototype.getPaletteEntries = function() {
     // 创建开始节点
     'create.start-event': createAction(
       'bpmn:StartEvent', 'event', 'bpmn-icon-start-event-none entry-modifier',
-      translate('Create StartEvent')
+      'Create StartEvent'
     ),
     
     // 创建结束节点
     'create.end-event': createAction(
       'bpmn:EndEvent', 'event', 'bpmn-icon-end-event-none entry-modifier',
-      translate('Create EndEvent')
+      'Create EndEvent'
     ),
 
     // 创建互斥网关
     'create.exclusive-gateway': createAction(
       'bpmn:ExclusiveGateway', 'gateway', 'iconfont iconhuchiwangguan entry-modifier',
-      translate('Create ExclusiveGateway')
+      'Create ExclusiveGateway'
     ),
 
-     //   创建并行网关
+     // 创建并行网关
     'create.parallel-gateway': createAction(
       'bpmn:ParallelGateway', 'gateway', 'iconfont iconbinghangwangguan entry-modifier',
-      translate('Create ParallelGateway')
+      'Create ParallelGateway'
     ),
 
-    //   创建用户节点
+    // 创建用户节点
       'create.user-task': createAction(
           'bpmn:UserTask', 'activity', 'iconfont iconshenpijiedian1 entry-modifier',
-          translate('Create UserTask')
+          'Create UserTask'
       ),
-    /**
-     * 创建子流程
-     */
+    // 创建子流程
     'create.subprocess-expanded': {
       group: 'activity',
       className: 'iconfont iconziliucheng-2 entry-modifier',
@@ -175,7 +173,7 @@ PaletteProvider.prototype.getPaletteEntries = function() {
       }
     },
     // 创建连接线
-  'global-connect-tool': {
+    'global-connect-tool': {
       // group: 'tools',
       className: 'iconfont iconbianzu4 entry-modifier',
       title: translate('Activate the global connect tool'),

@@ -4,7 +4,7 @@ import { Card, Alert, Typography } from 'antd';
 import ProcessDesignerFlow from '../components/ProcessDesigner'
 import styles from './Welcome.less';
 
-import WorkDomain from '../components/ProcessDesigner/components/workDomain/index'
+// import WorkDomain from '../components/ProcessDesigner/components/workDomain/index'
 const CodePreview: React.FC<{}> = ({ children }) => (
   <pre className={styles.pre}>
     <code>
@@ -15,7 +15,7 @@ const CodePreview: React.FC<{}> = ({ children }) => (
 
 export default (): React.ReactNode => (
   <PageContainer>
-    <WorkDomain />
+    {/* <WorkDomain /> */}
     <Card>
       <Alert
         message="更快更强的重型组件，已经发布。"
