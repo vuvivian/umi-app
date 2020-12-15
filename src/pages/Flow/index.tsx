@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-11 11:05:39
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-19 22:42:13
+ * @LastEditTime: 2020-11-29 00:11:16
  * @Descripttion: 
  * @FilePath: /umi-app/src/pages/Flow/index.tsx
  */
@@ -13,7 +13,7 @@ import { PageContainer, FooterToolbar } from '@ant-design/pro-layout';
 import ProTable, { ProColumns, ActionType } from '@ant-design/pro-table';
 import { Button, Modal,  Divider, message, Input, Drawer } from 'antd';
 import { TableListItem } from './data.d';
-import ProcessDesignerFlow from '../../components/ProcessDesigner/index'
+import ProcessDesignerFlow from '../../components/ProcessDesigner/index.jsx'
 import {getVersionList, getFlowDetail,  deploy, invalid} from './service';
 
 const Flow: React.FC<{}> = () => {

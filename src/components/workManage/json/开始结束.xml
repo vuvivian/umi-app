@@ -1,0 +1,32 @@
+EditWorkflow.vue?3d5e:552 <?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:flowable="http://flowable.org/bpmn" id="sample-diagram" targetNamespace="http://bpmn.io/schema/bpmn" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
+  <bpmn2:process id="process_0420a4343deb_wangjuan1125_1606733658" name="审批流程" isExecutable="true" flowable:description="开始结束" flowable:autoPassSame="true" flowable:autoPassEmpty="true" flowable:autoPassPerson="true" flowable:serviceValue="{&#34;completeProcess&#34;:[{&#34;key&#34;:&#34;lAutra&#34;,&#34;type&#34;:&#34;preset&#34;,&#34;function&#34;:&#34;svc_std_pre_audit&#34;,&#34;name&#34;:&#34;审核服务&#34;,&#34;model&#34;:&#34;studio.base&#34;,&#34;rollback&#34;:[]}],&#34;withdrawProcess&#34;:[{&#34;key&#34;:&#34;ES1e2u&#34;,&#34;type&#34;:&#34;preset&#34;,&#34;function&#34;:&#34;p_change_state_save&#34;,&#34;name&#34;:&#34;修改单据状态为已保存&#34;,&#34;model&#34;:&#34;ps.workflow.server&#34;,&#34;rollback&#34;:[{&#34;function&#34;:&#34;p_change_state_submit&#34;,&#34;name&#34;:&#34;修改单据状态为已提交&#34;}]}],&#34;vetoProcess&#34;:[{&#34;key&#34;:&#34;ZK1afI&#34;,&#34;type&#34;:&#34;preset&#34;,&#34;function&#34;:&#34;p_change_state_save&#34;,&#34;name&#34;:&#34;修改单据状态为已保存&#34;,&#34;model&#34;:&#34;ps.workflow.server&#34;,&#34;rollback&#34;:[{&#34;function&#34;:&#34;p_change_state_submit&#34;,&#34;name&#34;:&#34;修改单据状态为已提交&#34;}]}]}">
+    <bpmn2:startEvent id="StartEvent_1" name="开始">
+      <bpmn2:outgoing>Flow_0ym8ccr</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:endEvent id="Event_1s8fevi" name="结束">
+      <bpmn2:incoming>Flow_0ym8ccr</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:sequenceFlow id="Flow_0ym8ccr" sourceRef="StartEvent_1" targetRef="Event_1s8fevi" />
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process_0420a4343deb_wangjuan1125_1606733658">
+      <bpmndi:BPMNEdge id="Flow_0ym8ccr_di" bpmnElement="Flow_0ym8ccr">
+        <di:waypoint x="178" y="250" />
+        <di:waypoint x="232" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="142" y="232" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="149" y="275" width="22" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1s8fevi_di" bpmnElement="Event_1s8fevi">
+        <dc:Bounds x="232" y="232" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="239" y="275" width="22" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>

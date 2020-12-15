@@ -1,0 +1,248 @@
+:global {
+  .djs-overlay-container {
+    z-index: 99;
+    .bjsl-overlay {
+      z-index: 500;
+    }
+    .bjsl-overlay:hover {
+      z-index: 1000;
+    }
+    .group {
+      width: 50px;
+    }
+    .bjsl-dropdown {
+      display: none;
+    }
+    .bjsl-overlay:hover .bjsl-dropdown,
+    .bjsl-dropdown.open {
+      display: block;
+    }
+    .bjsl-issues {
+      padding: 8px;
+      color: #444;
+      font-family: 'Arial', sans-serif;
+      font-size: 12px;
+      background: #fafafa;
+      border: solid 1px #ccc;
+      border-radius: 2px;
+    }
+    .bjsl-icon {
+      background: #fff;
+      font-size: 20px;
+    }
+    .ivu-icon-md-close-circle {
+      color: #cc3300;
+    }
+    .ivu-icon-md-information-circle,
+    .ivu-icon-md-information {
+      color: #f7c71a;
+    }
+    .ivu-icon-md-information {
+      transform: rotate(180deg);
+      font-weight: bold;
+    }
+    .bjsl-overlay {
+      position: relative;
+    }
+    .bjsl-issues-top-right .bjsl-dropdown,
+    .bjsl-issues-bottom-right .bjsl-dropdown-content {
+      top: 0;
+      left: 0;
+    }
+    .bjsl-issues-bottom-right .bjsl-dropdown,
+    .bjsl-issues-top-right .bjsl-dropdown-content {
+      bottom: 0;
+      left: 0;
+    }
+    .bjsl-issues-top-right .bjsl-dropdown-content {
+      padding-bottom: 5px;
+    }
+    .bjsl-issues-bottom-right .bjsl-dropdown-content {
+      padding-top: 5px;
+    }
+    .bjsl-dropdown-content {
+      min-width: 260px;
+      position: absolute;
+      height: fit-content;
+    }
+    .bjsl-dropdown {
+      position: absolute;
+    }
+    .bjsl-issues {
+      list-style: none;
+      margin: 0;
+    }
+    .bjsl-issues ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    .bjsl-issues li {
+      display: flex;
+      flex-direction: row;
+    }
+    .bjsl-issues li:not(:first-child) {
+      margin-top: 7px;
+    }
+    .error1 {
+      color: #cc3300;
+      .ivu-icon {
+        font-size: 14px;
+      }
+      .ivu-icon-md-close:before {
+        font-weight: bold;
+      }
+      .ivu-icon-md-warning {
+        color: #f7c71a;
+      }
+    }
+    .bjsl-issues a {
+      color: #444;
+      margin-left: 8px;
+      text-decoration: none;
+    }
+    .bjsl-issues a:hover {
+      text-decoration: none;
+    }
+  }
+  #djs-overlay-info {
+    display: none;
+    .bjsl-button {
+      position: absolute;
+      cursor: pointer;
+      z-index: 2;
+      left: 500px;
+      top: 70px;
+      border-radius: 100px;
+      transform: translate(-50%);
+      background-color: #fafafa;
+      padding: 5px 10px;
+      border: none;
+      color: #ddd;
+      display: flex;
+      align-items: center;
+      outline: none;
+      font-weight: bold;
+      span {
+        padding-left: 6px;
+      }
+    }
+    .bjsl-button-inactive:hover {
+      color: #444;
+    }
+    .bjsl-button-success {
+      background-color: #52b415;
+      color: white;
+    }
+    .bjsl-button-error {
+      background-color: #cc3300;
+      color: white;
+    }
+    .bjsl-button-warning {
+      background-color: #f7c71a;
+      color: white;
+    }
+  }
+
+  .green {
+    background-color: rgba(82, 196, 26, 1);
+    border: solid rgba(82, 196, 26, 1) thin;
+  }
+  .red {
+    background-color: rgba(245, 34, 45, 1);
+    border: solid rgba(245, 34, 45, 1) thin;
+  }
+  .gray {
+    background-color: rgba(153, 154, 153, 1);
+    border: solid rgba(153, 154, 153, 1) thin;
+  }
+  span.state-circle {
+    margin-right: 5px;
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-top: -1px;
+    vertical-align: middle;
+  }
+
+  // 弹框居中
+  .workflow-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .ivu-modal {
+      top: 0;
+    }
+  }
+
+  // 禁止用户选中,鼠标变成手,用于带有click事件的标签
+  .link-no-select {
+    cursor: pointer;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    -khtml-user-select: none;
+    user-select: none;
+  }
+
+  //隐藏不需要的节点图标
+  .entry.bpmn-icon-intermediate-event-none,  // 隐藏intermediateThrowEvent事件图标
+  .entry.bpmn-icon-data-object,     //隐藏create dataObjectReference事件图标
+  .entry.bpmn-icon-data-store,      //隐藏create dataStoreReference事件图标
+  .entry.bpmn-icon-participant,     //隐藏create pool事件图标
+  .entry.bpmn-icon-group,           //隐藏Create Group事件图标
+  .entry.bpmn-icon-task,
+  .entry.bpmn-icon-gateway-or,
+  .entry.bpmn-icon-gateway-complex,
+  .entry.bpmn-icon-gateway-eventbased,
+  .entry.bpmn-icon-send,
+  .entry.bpmn-icon-receive,
+  .entry.bpmn-icon-manual,
+  .entry.bpmn-icon-business-rule,
+  .entry.bpmn-icon-service,
+  .entry.bpmn-icon-script,
+  .entry.bpmn-icon-call-activity,
+  .entry.bpmn-icon-event-subprocess-expanded,
+  .entry.bpmn-icon-transaction,
+  // .entry.bpmn-icon-subprocess-collapsed,
+  .djs-popup-header {
+    //隐藏普通节点
+    display: none;
+  }
+
+  // 左侧工具栏样式修改
+  .djs-palette.two-column.open {
+    width: 47px;
+  }
+
+  .djs-palette {
+    .iconshenpijiedian1,
+    .iconziliucheng-2,
+    .iconzhuashou {
+      font-size: 23px;
+    }
+    .iconziliucheng-2 {
+      display: none;
+    }
+  }
+  // 画布节点修改
+  .djs-context-pad {
+    .iconshenpijiedian1 {
+      font-size: 17px;
+    }
+  }
+
+  .entry.iconfont,
+  .entry.bpmn-icon-trash,
+  .entry.bpmn-icon-screw-wrench {
+    color: #3d4584;
+  }
+  .entry.bpmn-icon-end-event-none {
+    color: #ff3b45;
+  }
+  .entry {
+    cursor: pointer;
+  }
+}

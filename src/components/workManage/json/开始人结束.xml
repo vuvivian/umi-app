@@ -1,0 +1,49 @@
+EditWorkflow.vue?3d5e:552 <?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:flowable="http://flowable.org/bpmn" id="sample-diagram" targetNamespace="http://bpmn.io/schema/bpmn" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
+  <bpmn2:process id="process_0420a4343deb_wangjuan1125_1606732943" name="审批流程" isExecutable="true" flowable:description="123" flowable:autoPassSame="true" flowable:autoPassEmpty="false"
+   flowable:serviceValue="{&#34;completeProcess&#34;:[{&#34;key&#34;:&#34;lAutra&#34;,&#34;type&#34;:&#34;preset&#34;,&#34;function&#34;:&#34;svc_std_pre_audit&#34;,&#34;name&#34;:&#34;审核服务&#34;,&#34;model&#34;:&#34;studio.base&#34;,&#34;rollback&#34;:[]}],&#34;withdrawProcess&#34;:[{&#34;key&#34;:&#34;ES1e2u&#34;,&#34;type&#34;:&#34;preset&#34;,&#34;function&#34;:&#34;p_change_state_save&#34;,&#34;name&#34;:&#34;修改单据状态为已保存&#34;,&#34;model&#34;:&#34;ps.workflow.server&#34;,&#34;rollback&#34;:[{&#34;function&#34;:&#34;p_change_state_submit&#34;,&#34;name&#34;:&#34;修改单据状态为已提交&#34;}]}],&#34;vetoProcess&#34;:[{&#34;key&#34;:&#34;ZK1afI&#34;,&#34;type&#34;:&#34;preset&#34;,&#34;function&#34;:&#34;p_change_state_save&#34;,&#34;name&#34;:&#34;修改单据状态为已保存&#34;,&#34;model&#34;:&#34;ps.workflow.server&#34;,&#34;rollback&#34;:[{&#34;function&#34;:&#34;p_change_state_submit&#34;,&#34;name&#34;:&#34;修改单据状态为已提交&#34;}]}]}">
+    <bpmn2:startEvent id="StartEvent_1" name="开始">
+      <bpmn2:outgoing>Flow_1fg5jbp</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:userTask id="Activity_1j84jsv" name="用户审批节点1" 
+    flowable:nodeButton="[&#34;0&#34;,&#34;1&#34;,&#34;2&#34;,&#34;4&#34;,&#34;5&#34;,&#34;3&#34;]"
+     flowable:currentCheckList="[{&#34;phone&#34;:false,&#34;name&#34;:&#34;Administrator&#34;,&#34;url&#34;:null,&#34;id&#34;:&#34;0a35b904-2ee7-11eb-a584-0242ac110003_2&#34;}]" 
+     flowable:returnValue="true" flowable:serviceValue="{}" 
+     flowable:candidateUsers="0a35b904-2ee7-11eb-a584-0242ac110003_2">
+      <bpmn2:incoming>Flow_1fg5jbp</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_02c229s</bpmn2:outgoing>
+    </bpmn2:userTask>
+    <bpmn2:sequenceFlow id="Flow_1fg5jbp" sourceRef="StartEvent_1" targetRef="Activity_1j84jsv" />
+    <bpmn2:endEvent id="Event_0wv01kj" name="结束">
+      <bpmn2:incoming>Flow_02c229s</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:sequenceFlow id="Flow_02c229s" sourceRef="Activity_1j84jsv" targetRef="Event_0wv01kj" />
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process_0420a4343deb_wangjuan1125_1606732943">
+      <bpmndi:BPMNEdge id="Flow_1fg5jbp_di" bpmnElement="Flow_1fg5jbp">
+        <di:waypoint x="178" y="250" />
+        <di:waypoint x="230" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02c229s_di" bpmnElement="Flow_02c229s">
+        <di:waypoint x="330" y="250" />
+        <di:waypoint x="382" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="142" y="232" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="149" y="275" width="22" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1j84jsv_di" bpmnElement="Activity_1j84jsv">
+        <dc:Bounds x="230" y="210" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0wv01kj_di" bpmnElement="Event_0wv01kj">
+        <dc:Bounds x="382" y="232" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="389" y="275" width="22" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>

@@ -1,0 +1,47 @@
+EditWorkflow.vue?3d5e:552 <?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:flowable="http://flowable.org/bpmn" xmlns:bioc="http://bpmn.io/schema/bpmn/biocolor/1.0" id="sample-diagram" targetNamespace="http://bpmn.io/schema/bpmn" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd">
+  <bpmn2:process id="process_0420a4343deb_wangjuan1125_1606733709" name="排他分支" isExecutable="true" flowable:description="排他des" flowable:serviceValue="{&#34;completeProcess&#34;:[{&#34;key&#34;:&#34;lAutra&#34;,&#34;type&#34;:&#34;preset&#34;,&#34;function&#34;:&#34;svc_std_pre_audit&#34;,&#34;name&#34;:&#34;审核服务&#34;,&#34;model&#34;:&#34;studio.base&#34;,&#34;rollback&#34;:[]}],&#34;withdrawProcess&#34;:[{&#34;key&#34;:&#34;ES1e2u&#34;,&#34;type&#34;:&#34;preset&#34;,&#34;function&#34;:&#34;p_change_state_save&#34;,&#34;name&#34;:&#34;修改单据状态为已保存&#34;,&#34;model&#34;:&#34;ps.workflow.server&#34;,&#34;rollback&#34;:[{&#34;function&#34;:&#34;p_change_state_submit&#34;,&#34;name&#34;:&#34;修改单据状态为已提交&#34;}]}],&#34;vetoProcess&#34;:[{&#34;key&#34;:&#34;ZK1afI&#34;,&#34;type&#34;:&#34;preset&#34;,&#34;function&#34;:&#34;p_change_state_save&#34;,&#34;name&#34;:&#34;修改单据状态为已保存&#34;,&#34;model&#34;:&#34;ps.workflow.server&#34;,&#34;rollback&#34;:[{&#34;function&#34;:&#34;p_change_state_submit&#34;,&#34;name&#34;:&#34;修改单据状态为已提交&#34;}]}]}">
+    <bpmn2:startEvent id="StartEvent_1" name="开始">
+      <bpmn2:outgoing>Flow_0j5o6x0</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:exclusiveGateway id="Gateway_1ixn2gd" name="排它分支" default="Flow_1rrv1k8">
+      <bpmn2:incoming>Flow_0j5o6x0</bpmn2:incoming>
+      <bpmn2:outgoing>Flow_1rrv1k8</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:sequenceFlow id="Flow_0j5o6x0" sourceRef="StartEvent_1" targetRef="Gateway_1ixn2gd" />
+    <bpmn2:endEvent id="Event_0fbfj1j" name="结束">
+      <bpmn2:incoming>Flow_1rrv1k8</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:sequenceFlow id="Flow_1rrv1k8" sourceRef="Gateway_1ixn2gd" targetRef="Event_0fbfj1j" flowable:gatewayDomain="[[&#34;fff&#34;,&#34;=&#34;,&#34;2&#34;,&#34;0&#34;]]" flowable:expressionObj="{&#34;domain&#34;:[[&#34;fff&#34;,&#34;=&#34;,&#34;2&#34;,&#34;0&#34;]],&#34;valueExpression&#34;:&#34;${(fff ==\&#34;2\&#34;)}&#34;}" />
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="process_0420a4343deb_wangjuan1125_1606733709">
+      <bpmndi:BPMNEdge id="Flow_1rrv1k8_di" bpmnElement="Flow_1rrv1k8" bioc:stroke="#3D4584">
+        <di:waypoint x="285" y="250" />
+        <di:waypoint x="342" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0j5o6x0_di" bpmnElement="Flow_0j5o6x0">
+        <di:waypoint x="178" y="250" />
+        <di:waypoint x="235" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="142" y="232" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="149" y="275" width="22" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1ixn2gd_di" bpmnElement="Gateway_1ixn2gd" isMarkerVisible="true" bioc:stroke="#3D4584">
+        <dc:Bounds x="235" y="225" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="238" y="201" width="44" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0fbfj1j_di" bpmnElement="Event_0fbfj1j">
+        <dc:Bounds x="342" y="232" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="349" y="275" width="22" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn2:definitions>

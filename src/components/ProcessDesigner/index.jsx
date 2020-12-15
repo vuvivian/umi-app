@@ -2,9 +2,9 @@
  * @Author: vuvivian
  * @Date: 2020-11-11 23:23:21
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-27 00:54:40
+ * @LastEditTime: 2020-11-29 00:25:55
  * @Descripttion: 最终版
- * @FilePath: /umi-app/src/components/ProcessDesigner/index.js
+ * @FilePath: /umi-app/src/components/ProcessDesigner/index.jsx
  */
 import React, { Component } from 'react';
 import { notification , Button, Tooltip, Divider, Tabs, Form, Input, Checkbox, Switch, Select, message} from 'antd';
@@ -27,7 +27,7 @@ import 'bpmn-js-properties-panel/dist/assets/bpmn-js-properties-panel.css'; // �
 // 引入校验插件
 import lintModule from 'bpmn-js-bpmnlint';
 // 组件
-import {AssignSelect} from './components'
+import {WorkAssignSelect, WorkflowDomain } from './components'
 import { fakeFlowCreate } from './services/index';
 
 const { TabPane } = Tabs;
@@ -42,6 +42,7 @@ class ProcessDesignerFlow extends Component{
       visible: false, // 人岗选择控件
       assignList: null, // 人员列表
       isRoot: true, // 是否在操作跟节点
+      domainFields: []
     }
   }
 
@@ -362,9 +363,9 @@ class ProcessDesignerFlow extends Component{
     const names = _.pluck(assign, 'user');
     const ids = _.pluck(assign, 'id');
     console.log('assign', assign)
-    // this.setState({
-    //   assignList: assign
-    // })
+    this.setState({
+      assignList: assign
+    })
     this.changeField(ids,'candidateUsers');
     this.handleCancel();
   };
@@ -569,11 +570,13 @@ class ProcessDesignerFlow extends Component{
             </TabPane>
           </Tabs>
         </div>
-        <AssignSelect 
+        <WorkAssignSelect 
           visible={visible}
           onOk={this.handleOk}
           onCancel = {this.handleCancel}
-          />         
+          />  
+        <WorkflowDomain fields="domainFields" >
+        </WorkflowDomain>       
       </div>
     )
   }

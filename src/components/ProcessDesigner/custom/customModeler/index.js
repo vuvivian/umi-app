@@ -2,7 +2,7 @@
  * @Author: vuvivian
  * @Date: 2020-11-12 01:56:58
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-11-14 15:52:50
+ * @LastEditTime: 2020-11-29 13:50:28
  * @Descripttion: 
  * @FilePath: /umi-app/src/components/ProcessDesigner/custom/customModeler/index.js
  */
@@ -16,6 +16,7 @@ export default function CustomModeler(options) {
     this._customElements = [];
 }
 inherits(CustomModeler, Modeler);
+
 CustomModeler.prototype._modules = [].concat(
     CustomModeler.prototype._modules, [
         CustomModule
