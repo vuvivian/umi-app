@@ -2,9 +2,9 @@
  * @Author: vuvivian
  * @Date: 2020-11-29 12:48:48
  * @LastEditors: vuvivian
- * @LastEditTime: 2020-12-14 23:29:36
+ * @LastEditTime: 2020-12-15 22:05:45
  * @Descripttion:
- * @FilePath: /rz_web/src/pages/system/workManage/designer/ProcessDesigner.jsx
+ * @FilePath: /umi-app/src/components/workManage/designer/ProcessDesigner.jsx
  */
 import React, { Component } from 'react';
 import {
@@ -69,7 +69,6 @@ class ProcessDesigner extends Component {
     };
 
     componentWillMount() {
-        // 获取流程属性
         this.getType();
         this.getFields();
     }
@@ -92,13 +91,8 @@ class ProcessDesigner extends Component {
         } else {
             diagramXML = getDefaultXml();
         }
-        // 绘制初始流程
         this.renderDiagram(diagramXML);
-        // 添加监听事件
-        // this.addModelerListener();
         this.addEventBusListener();
-        // todo 获取domain字段
-        // this.getMainTableFields();
     }
 
     // 渲染 xml 格式
@@ -118,7 +112,6 @@ class ProcessDesigner extends Component {
     addEventBusListener = () => {
         let that = this;
         const eventBus = this.bpmnModeler.get('eventBus'); // 需要使用eventBus
-        // 节点变化时
         eventBus.on('element.changed', function (e) {
             if (!e) return;
             const elementRegistry = that.bpmnModeler.get('elementRegistry');
@@ -134,7 +127,6 @@ class ProcessDesigner extends Component {
             );
         });
 
-        // 节点点击的时候
         eventBus.on('element.click', function (e) {
             if (!e) return;
             const elementRegistry = that.bpmnModeler.get('elementRegistry');
@@ -180,7 +172,6 @@ class ProcessDesigner extends Component {
                 });
                 this.setState({
                     domainFields: res,
-                    // domainFields: [{"type":"char","name":"fff","string":"文本","model":"mmm"},{"type":"integer","name":"nnnn","string":"整数","model":"mmm"}]
                 });
             });
     };
@@ -224,7 +215,6 @@ class ProcessDesigner extends Component {
                 }
                 break;
             case 'bpmn:ExclusiveGateway':
-                //设置第一个出分支为默认分支
                 if (outgoing && outgoing.length > 0) {
                     currentElement.default = currentElement.businessObject.default
                         ? currentElement.businessObject.default.id
@@ -233,7 +223,6 @@ class ProcessDesigner extends Component {
                 values = {
                     name: name || '排他网关',
                     default: currentElement.default,
-                    // todo 多个分支
                 };
                 if (!name) {
                     currentElement.businessObject.name = values.name;
@@ -253,7 +242,6 @@ class ProcessDesigner extends Component {
             case 'bpmn:UserTask':
                 values = {
                     name: name || '用户审批',
-                    // name: name,
                     Approver: checkAssignList,
                     executeType: executeType,
                     radio: radio,
@@ -283,16 +271,13 @@ class ProcessDesigner extends Component {
             default:
                 break;
         }
-        // 更新表单
         this.formRef.current.setFieldsValue(values);
     }
 
-    // 属性变更的时候 更新回流程节点
     changeField = (value, type, element = this.state.currentElement, from) => {
         let properties = {};
         let moddle = this.bpmnModeler.get('moddle');
         if (element) {
-            // 如果是流程属性的话需要拆分下
             if (type === 'autoAttribute') {
                 _.map(value, v => {
                     element[v] = true;
@@ -303,7 +288,6 @@ class ProcessDesigner extends Component {
                 element[type] = value;
                 element.businessObject[type] = value;
             } else if (type === 'default') {
-                //设置默认分支
                 element.businessObject[type] = undefined;
                 let defaultElement = _.find(element.outgoing, item => {
                     return item.id === value;
@@ -312,12 +296,10 @@ class ProcessDesigner extends Component {
                 element[type] = value;
                 element.businessObject[type] = value;
             } else if (type === 'checkAssignList') {
-                // 人岗存储处理 candidateUsers checkAssignList
                 value = JSON.stringify(value);
                 element[type] = value;
                 element.businessObject[type] = value;
             } else if (type === 'modelType') {
-                // 流程属性
                 value = JSON.stringify(value);
                 element[type] = value;
                 element.businessObject[type] = value;
@@ -335,19 +317,16 @@ class ProcessDesigner extends Component {
                 element[type] = value;
                 element.businessObject[type] = value;
             }
-            // 特殊处理流程属性
             properties[type] = value;
             this.updateProperties(properties, element);
         }
     };
 
-    // 更新流程属性
     updateProperties(properties, element = this.state.currentElement) {
         const modeling = this.bpmnModeler.get('modeling');
         modeling.updateProperties(element, properties);
     }
 
-    // 更新分支
     updateGateWayList(element) {
         element.gatewayList = element.businessObject.outgoing;
         _.each(element.gatewayList, (item, index) => {
@@ -362,7 +341,6 @@ class ProcessDesigner extends Component {
         });
     }
 
-    // 获取某种类型的节点节点
     getRootElement(type = 'bpmn:Process') {
         let elements = this.bpmnModeler.get('elementRegistry')._elements;
         let root = _.find(elements, ele => {
@@ -371,19 +349,15 @@ class ProcessDesigner extends Component {
         return root.element;
     }
 
-    //后退方法
     undo = () => {
         this.bpmnModeler.get('commandStack').undo();
     };
 
-    //前进方法
     redo = () => {
         this.bpmnModeler.get('commandStack').redo();
     };
 
-    // 流程对齐 left|right|center|top|bottom|middle
     align = type => {
-        //获取所有选中的element
         let selectionList = this.bpmnModeler.get('selection').get();
         if (selectionList.length > 1) {
             this.bpmnModeler.get('alignElements').trigger(selectionList, type);
@@ -392,13 +366,9 @@ class ProcessDesigner extends Component {
         }
     };
 
-    //一键整理功能
     arrange = () => {
-        //获取选中的节点
         let selectionList = this.bpmnModeler.get('selection').get();
-        //获取页面中的所有节点
         let _elements = this.bpmnModeler.get('elementRegistry')._elements;
-        //获取所有除process的节点的数组
         let allElements = _.pluck(
             _.filter(_elements, ele => {
                 return ele.element.type !== 'bpmn:Process';
@@ -411,11 +381,10 @@ class ProcessDesigner extends Component {
             .trigger(finalElements, 'horizontal');
     };
 
-    //流程缩放
     handleZoom = radio => {
         const newScale = !radio
-            ? 1.0 // 不输入radio则还原
-            : this.state.scale + radio <= 0.2 // 最小缩小倍数
+            ? 1.0
+            : this.state.scale + radio <= 0.2
                 ? 0.2
                 : this.state.scale + radio;
 
@@ -425,13 +394,11 @@ class ProcessDesigner extends Component {
         });
     };
 
-    //关闭校验
     closeCheck = () => {
         this.removeDom();
         this.ifCheck = false;
     };
 
-    //
     removeDom() {
         document.getElementById('djs-overlay-info').style.display = 'none';
         let overlayContainer = document.querySelectorAll('.djs-overlay-linting');
@@ -440,7 +407,6 @@ class ProcessDesigner extends Component {
         });
     }
 
-    // 导入
     importXML = e => {
         const that = this;
         if (e.target.files.length > 0) {
@@ -455,14 +421,12 @@ class ProcessDesigner extends Component {
         }
     };
 
-    // 导出
     exportXML = () => {
         this.bpmnModeler.saveSVG({ format: true }, (err, data) => {
             this.download('svg', data);
         });
     };
 
-    // 导出
     exportDia = () => {
         this.bpmnModeler.saveXML({ format: true }, (err, data) => {
             const dataTrack = 'bpmn';
@@ -481,7 +445,6 @@ class ProcessDesigner extends Component {
         });
     };
 
-    // 下载
     download = (type, data, name) => {
         let dataTrack = '';
         const a = document.createElement('a');
@@ -510,7 +473,6 @@ class ProcessDesigner extends Component {
         document.body.removeChild(a);
     };
 
-    // 校验
     checkFun = () => {
         // this.ifCheck = true;
         // this.removeDom();
@@ -597,7 +559,6 @@ class ProcessDesigner extends Component {
         const root = this.bpmnModeler.get('canvas').getRootElement().businessObject;
         const _elements = this.bpmnModeler.get('elementRegistry').getAll();
 
-        // 更新根节点的processkey
         if (_.isEmpty(this.state.id)) {
             const id = _.uniqueId('process_');
             root.id = id;
